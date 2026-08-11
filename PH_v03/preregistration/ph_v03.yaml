@@ -1,0 +1,75 @@
+version: PH-v0.3-frequency-causal-specificity-1.0
+scope: synthetic detector validation; not evidence that PH exists in nature
+stages:
+  pilot:
+    n_seeds_per_mode: 30
+    seed_start: 202603300
+  confirmatory:
+    n_seeds_per_mode: 200
+    seed_start: 202603800
+modes:
+  - shared_boundary
+  - separate_boundary
+  - common_driver
+  - viability_only
+  - observability_only
+  - null
+  - adversarial_mimic
+time:
+  T: 8192
+  burn_in: 1024
+stimuli:
+  train_multisine_frequencies: [0.00390625, 0.0078125, 0.015625, 0.03125, 0.0625, 0.125]
+  train_amplitude: 0.35
+  impulse_amplitude: 0.90
+  prbs_block: 8
+  ood_frequencies: [0.005208333333333333, 0.010416666666666666, 0.020833333333333332, 0.041666666666666664, 0.08333333333333333]
+  ood_amplitude: 0.42
+  unseen_amplitude: 0.50
+  chirp_f0: 0.0033333333333333335
+  chirp_f1: 0.10
+dynamics:
+  rho_B: 0.965
+  rho_V: 0.83
+  rho_O: 0.62
+  kappa: 0.22
+  alpha_V: 0.52
+  alpha_O: -0.44
+  separate_rho_BV: 0.965
+  separate_rho_BO: 0.90
+  common_beta_V: 0.080
+  common_beta_O: -0.070
+  process_noise_B: 0.025
+  process_noise_downstream: 0.010
+  measurement_noise: 0.020
+  margin_scale: 8.0
+analysis:
+  fit_stride: 8
+  ridge_lambda: 0.001
+  bootstrap_reps: 1500
+  spectral_power_min: 0.0001
+  leakage_max: 0.05
+  margin_sd_min: 0.015
+  saturation_abs: 0.98
+  saturation_fraction_max: 0.05
+  clamp_lcb_min: 0.30
+  ood_ratio_ucb_max: 0.95
+  downstream_cross_ratio_max: 0.10
+  pilot_positive_power_min: 0.80
+  negative_false_positive_max: 0.05
+  adversarial_false_positive_max: 0.05
+  representation_rho_tolerance: 0.08
+  representation_min_lowfreq_residual_coherence: 0.20
+primary_endpoints:
+  - K_V
+  - K_O
+  - R_OOD
+  - negative_control_false_positive_rate
+  - adversarial_mimic_false_positive_rate
+secondary_endpoints:
+  - input_output_coherence
+  - empirical_transfer_function
+  - parametric_rho_B
+  - nonparametric_rho_B
+  - spectral_leakage
+legacy_threshold_note: D_star and Omega remain legacy secondary endpoints conceptually; this frequency-domain engine does not redefine them with incompatible proxies.

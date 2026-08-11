@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,pandas as pd
+ROOT=Path(__file__).resolve().parent
+if __name__=='__main__':
+ d=json.loads((ROOT/'results'/'decision.json').read_text()); c=pd.read_csv(ROOT/'results'/'confirmatory_summary.csv').set_index('mode');s=c.loc['shared_boundary']
+ lines=[f"# PH v0.3 Frequency-Domain Causal-Specificity Falsification Report",'',f"**Decision: {d['decision']}**",'', '## Confirmatory primary endpoints', '', f"- N = {int(s.N)} seeds/mode", f"- K_V = {s.K_V:.4f} (95% CI {s.K_V_LCB:.4f}..{s.K_V_UCB:.4f})", f"- K_O = {s.K_O:.4f} (95% CI {s.K_O_LCB:.4f}..{s.K_O_UCB:.4f})", f"- R_OOD = {s.R_OOD:.4f} (95% CI {s.R_OOD_LCB:.4f}..{s.R_OOD_UCB:.4f})", f"- downstream V cross ratio = {s.V_cross_ratio:.4f}", f"- downstream O cross ratio = {s.O_cross_ratio:.4f}", f"- parametric rho_B = {s.rho_B_parametric:.4f}; nonparametric V/O = {s.rho_B_nonparam_V:.4f}/{s.rho_B_nonparam_O:.4f}", f"- residual low-frequency coherence = {s.residual_lowfreq_coherence:.4f}", '', '## Gates']
+ for k,v in d['gates'].items(): lines.append(f"- {k}: {'PASS' if v else 'FAIL'}")
+ lines += ['', '## Negative controls', f"- maximum PH-like rate among separate/common-driver/null = {d['controls']['max_core_negative_fp']:.4f}", f"- adversarial spectral mimic PH-like rate = {d['controls']['adversarial_fp']:.4f}", '', '## Scope', 'This is a synthetic falsifier validation. It does not establish PH in biology, humans, AI, consciousness, or nature. The experiment asks whether a known shared boundary dynamic can be distinguished from common-driver, separate-boundary, one-sided, null, and spectrum-matched alternatives using clamp, OOD, and frequency-domain evidence.', '', 'Legacy D* and Omega were deliberately not redefined with incompatible proxies in this frequency engine; continuous margins are the primary variables.']
+ (ROOT/'reports'/'PH_v0.3_Frequency_Domain_Report_2026-08-12.md').write_text('\n'.join(lines),encoding='utf-8')

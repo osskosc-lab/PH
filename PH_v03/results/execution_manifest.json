@@ -1,0 +1,46 @@
+{
+  "version": "PH-v0.3-frequency-causal-specificity-1.0",
+  "decision": "PH-v0.3 SUPPORTED",
+  "execution": "confirmatory per-mode chunks preserving original frozen mode index and noise-code mapping",
+  "committed_files": {
+    "preregistration/freeze.json": {
+      "sha256": "152dedee02d52185f3a356d8035bda204d34d038ad666dbf114928fac09fc518",
+      "bytes": 5666
+    },
+    "results/pilot_summary.csv": {
+      "sha256": "3fc9ec54276d708e404b858b4153d04dac1da89abc8b107c008a962f83290383",
+      "bytes": 3151
+    },
+    "results/confirmatory_summary.csv": {
+      "sha256": "ca7f8a5fb150949a5e6abd5c39b81a24ae9880f45dc2d08e30bcdbb5bdb65864",
+      "bytes": 3209
+    },
+    "results/decision.json": {
+      "sha256": "dcbb0f3abafe162f0247c837eeb6606a14c621f270a149e0666603fa98be32b7",
+      "bytes": 2114
+    },
+    "reports/PH_v0.3_Frequency_Domain_Report_2026-08-12.md": {
+      "sha256": "67487f4100a3f9444ea5576abc0a9c30d3e85986829a030641a7dd1499e8f051",
+      "bytes": 4667
+    },
+    "reports/PH_v0.3_Pilot_Sensitivity_Audit_2026-08-12.md": {
+      "sha256": "04d0f48ec1a7a6e0b5cb5cffd87be6e33a8e04d6a3d4c4a7d8c080e55da6cd2f",
+      "bytes": 1266
+    },
+    "README.md": {
+      "sha256": "f584b7bcb0694231fea09f6886f1b09ea603bedefe686c874567f6c206d803b1",
+      "bytes": 2113
+    }
+  },
+  "local_delivery_artifacts": {
+    "results/confirmatory_per_seed.csv": {
+      "sha256": "55b421321f422e78a951d1d1e5e1092200b8926d2fa05fd49f1d7eafb569bf2f",
+      "bytes": 275597
+    },
+    "PH_v0.3_Frequency_Domain_Causal_Specificity_Report_2026-08-12.pdf": {
+      "sha256": "3dbc77cc8edcf5a258772f36663b2070fd55223128fbe5386df403ecac52558b",
+      "bytes": 267331
+    }
+  },
+  "note": "Large per-seed CSV and rendered PDF are provided as delivery artifacts; GitHub stores the frozen code, preregistration, summary tables, decision, and reports."
+}
