@@ -1,0 +1,50 @@
+{
+  "version": "PH-v0.3.1",
+  "decision": "INCONCLUSIVE",
+  "freeze_sha256": "c638757ca196ee111075331aa83eb1a852638e33ddb16dd88283f4489c3ce693",
+  "shared": {
+    "dual_dose_response": true,
+    "R_lambda_OOD": 0.9069090493618728,
+    "R_lambda_OOD_UCB": 0.9294344096074016,
+    "R_CIC": 0.4950731129020667,
+    "R_CIC_UCB": 0.5574888208215732,
+    "K_V_08": 0.7807945424713648,
+    "K_O_08": 0.7764041017292357
+  },
+  "robustness": {
+    "breakpoints": {
+      "clamp_leakage": 0.5,
+      "clamp_noise": 1.0,
+      "colored_noise": 1.0,
+      "compound": 0.25,
+      "latent_driver": 0.75,
+      "measurement_error": 1.0,
+      "parameter_drift": 1.0,
+      "weak_vo_coupling": 1.0
+    },
+    "clamp_breakpoint": 0.5,
+    "latent_driver_breakpoint": 0.75,
+    "compound_stress_accuracy": 0.75,
+    "compound_required_level": 0.5
+  },
+  "false_positive": {
+    "separate_boundary": 0.0,
+    "common_driver": 0.0,
+    "adversarial_clamp_mimic": 0.0
+  },
+  "gates": {
+    "G0_freeze_integrity": true,
+    "G1_dynamic_range": true,
+    "G2_saturation": false,
+    "G3_spectral_excitation_inherited_v03": true,
+    "G4_positive_control_recovery": true,
+    "G5_core_negative_control": true,
+    "G6_imperfect_clamp_dose_response": true,
+    "G7_intervention_OOD": true,
+    "G8_latent_driver_rejection": true,
+    "G9_adversarial_clamp_mimic": true,
+    "G10_representation_independence": false,
+    "G11_downstream_specificity": true,
+    "G12_compound_stress_robustness": false
+  }
+}
