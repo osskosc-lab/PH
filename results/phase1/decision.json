@@ -1,0 +1,20 @@
+{
+  "version": "PH-v0.2-toy-0.1",
+  "config_sha256": "f11413a33b9f40a43ff3541fd910ba27a58d66cd13f8da10379cc17a771e0f72",
+  "primary_mode": "coupled",
+  "primary_decision": "INCONCLUSIVE",
+  "negative_controls": {
+    "viability_only": "INCONCLUSIVE",
+    "observability_only": "INCONCLUSIVE",
+    "null": "INCONCLUSIVE"
+  },
+  "thresholds": {
+    "repair_fraction_required": 0.8,
+    "min_viability_drop_fraction": 0.1,
+    "min_opacity_drop_absolute": 0.04,
+    "min_coupling_corr": 0.6,
+    "min_history_ratio": 1.1
+  },
+  "audit_note": "History recovery outcomes were constant (success_rate=1.0) in all modes, so Lambda_H is numerically unstable/non-informative despite exceeding its nominal threshold. Negative-control separation also failed.",
+  "audited_primary_conclusion": "INCONCLUSIVE: the coupled-mode viability effect, observability effect, and V-O coupling criteria did not pass. The history test is saturated and should not be interpreted as evidence."
+}
