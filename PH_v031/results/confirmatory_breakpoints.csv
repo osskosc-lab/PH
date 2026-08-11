@@ -1,0 +1,9 @@
+stage,factor,s_star
+confirmatory,clamp_leakage,0.5
+confirmatory,clamp_noise,1.0
+confirmatory,colored_noise,1.0
+confirmatory,compound,0.25
+confirmatory,latent_driver,0.75
+confirmatory,measurement_error,1.0
+confirmatory,parameter_drift,1.0
+confirmatory,weak_vo_coupling,1.0

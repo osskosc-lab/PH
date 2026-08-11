@@ -1,0 +1,9 @@
+stage,factor,s_star
+pilot,clamp_leakage,0.5
+pilot,clamp_noise,1.0
+pilot,colored_noise,1.0
+pilot,compound,0.25
+pilot,latent_driver,1.0
+pilot,measurement_error,0.75
+pilot,parameter_drift,1.0
+pilot,weak_vo_coupling,1.0

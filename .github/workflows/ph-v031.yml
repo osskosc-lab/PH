@@ -1,0 +1,38 @@
+name: PH v0.3.1 checks
+
+on:
+  push:
+    paths:
+      - 'PH_v031/**'
+      - '.github/workflows/ph-v031.yml'
+  pull_request:
+    paths:
+      - 'PH_v031/**'
+      - '.github/workflows/ph-v031.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke-and-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r PH_v031/requirements.txt
+      - run: pytest -q PH_v031/tests/test_v031.py
+      - name: Verify frozen source hashes
+        run: |
+          cd PH_v031
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('.')
+          fr=json.loads((root/'preregistration'/'freeze.json').read_text())
+          bad=[]
+          for rel,want in fr['source_hashes'].items():
+              got=hashlib.sha256((root/rel).read_bytes()).hexdigest()
+              if got!=want: bad.append(rel)
+          if bad: raise SystemExit('freeze mismatch: '+', '.join(bad))
+          print('freeze verified:', fr['freeze_sha256'])
+          PY

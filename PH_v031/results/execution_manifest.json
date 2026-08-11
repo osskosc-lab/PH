@@ -1,0 +1,17 @@
+{
+  "version": "PH-v0.3.1",
+  "status": "official confirmatory completed; final decision INCONCLUSIVE",
+  "pilot_seed_start": 202631100,
+  "pilot_n_per_condition": 40,
+  "confirmatory_seed_start": 202631800,
+  "confirmatory_n_per_condition": 200,
+  "freeze_sha256": "c638757ca196ee111075331aa83eb1a852638e33ddb16dd88283f4489c3ce693",
+  "confirmatory_seed_reuse": false,
+  "notes": [
+    "Pilot strengthened adversarial_clamp_mimic target-specific variability and froze a Fisher-z conservative CIC uncertainty rule before confirmatory seeds were used.",
+    "No thresholds were relaxed after freeze.",
+    "Confirmatory revealed a representation-independence disagreement (kernel ratio > 1 for shared) and compound-stress accuracy below 0.80.",
+    "A saturation gate also failed only for the intentionally wide adversarial clamp mimic; because this gate was frozen, it is retained as a technical INCONCLUSIVE reason rather than silently re-scoped.",
+    "Stress-level nuisance noise codes differ by level, producing some non-monotone P_correct values; therefore breakpoints are descriptive and should be paired across strength in a future r2 audit."
+  ]
+}
