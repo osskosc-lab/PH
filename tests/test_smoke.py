@@ -1,11 +1,9 @@
 from pathlib import Path
-import importlib.util
+import sys
 
-
-MODULE_PATH = Path(__file__).resolve().parents[1] / "src" / "ph_v02_full.py"
-spec = importlib.util.spec_from_file_location("ph_v02_full", MODULE_PATH)
-ph = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(ph)
+SRC = Path(__file__).resolve().parents[1] / "src"
+sys.path.insert(0, str(SRC))
+import ph_v02_full as ph
 
 
 def test_boundary_target_in_range():
@@ -22,4 +20,5 @@ def test_observability_proxy_is_finite():
     out = system.observability_opacity(cfg.boundary_baseline)
     assert 0.0 <= out["omega"] <= 1.0
     assert out["effective_rank"] > 0.0
-    assert out["sigma_max"] >= out["sigma_min"] >= 0.0
+    assert out["sigma_min"] >= 0.0
+    assert out["condition_number"] >= 1.0
