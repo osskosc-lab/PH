@@ -1,0 +1,19 @@
+{
+  "version": "PH-v0.2.1-causal-specificity-1.1",
+  "config_sha256": "cb14c9abcae421ec25341b8e251a3f3a76002f0bb64e515a6f0a09f283cd17af",
+  "final_decision": "PH_SIGNATURE_SUPPORTED",
+  "final_stage": "confirmatory",
+  "N_confirmatory": 256,
+  "M0_decision": "PH_SIGNATURE_POSITIVE",
+  "Gate8_negative_control_specificity": true,
+  "Gate9_independent_confirmatory_holdout": true,
+  "negative_controls": {
+    "M1_split_boundary": "NEGATIVE_CONTROL_REJECTED",
+    "M2_common_driver": "NEGATIVE_CONTROL_REJECTED",
+    "M3_viability_only": "NEGATIVE_CONTROL_REJECTED",
+    "M4_observability_only": "NEGATIVE_CONTROL_REJECTED",
+    "M5_sensor_artifact": "NEGATIVE_CONTROL_REJECTED",
+    "M6_null": "NEGATIVE_CONTROL_REJECTED"
+  },
+  "interpretation": "Synthetic detector validation only; not evidence that PH exists in nature."
+}
