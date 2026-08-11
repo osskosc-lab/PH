@@ -1,0 +1,136 @@
+{
+  "version": "PH-v0.3-frequency-causal-specificity-1.0",
+  "frozen_after_pilot": true,
+  "config": {
+    "version": "PH-v0.3-frequency-causal-specificity-1.0",
+    "scope": "synthetic detector validation; not evidence that PH exists in nature",
+    "stages": {
+      "pilot": {
+        "n_seeds_per_mode": 30,
+        "seed_start": 202603300
+      },
+      "confirmatory": {
+        "n_seeds_per_mode": 200,
+        "seed_start": 202603800
+      }
+    },
+    "modes": [
+      "shared_boundary",
+      "separate_boundary",
+      "common_driver",
+      "viability_only",
+      "observability_only",
+      null,
+      "adversarial_mimic"
+    ],
+    "time": {
+      "T": 8192,
+      "burn_in": 1024
+    },
+    "stimuli": {
+      "train_multisine_frequencies": [
+        0.00390625,
+        0.0078125,
+        0.015625,
+        0.03125,
+        0.0625,
+        0.125
+      ],
+      "train_amplitude": 0.35,
+      "impulse_amplitude": 0.9,
+      "prbs_block": 8,
+      "ood_frequencies": [
+        0.005208333333333333,
+        0.010416666666666666,
+        0.020833333333333332,
+        0.041666666666666664,
+        0.08333333333333333
+      ],
+      "ood_amplitude": 0.42,
+      "unseen_amplitude": 0.5,
+      "chirp_f0": 0.0033333333333333335,
+      "chirp_f1": 0.1
+    },
+    "dynamics": {
+      "rho_B": 0.965,
+      "rho_V": 0.83,
+      "rho_O": 0.62,
+      "kappa": 0.22,
+      "alpha_V": 0.52,
+      "alpha_O": -0.44,
+      "separate_rho_BV": 0.965,
+      "separate_rho_BO": 0.9,
+      "common_beta_V": 0.08,
+      "common_beta_O": -0.07,
+      "process_noise_B": 0.025,
+      "process_noise_downstream": 0.01,
+      "measurement_noise": 0.02,
+      "margin_scale": 8.0
+    },
+    "analysis": {
+      "fit_stride": 8,
+      "ridge_lambda": 0.001,
+      "bootstrap_reps": 1500,
+      "spectral_power_min": 0.0001,
+      "leakage_max": 0.05,
+      "margin_sd_min": 0.015,
+      "saturation_abs": 0.98,
+      "saturation_fraction_max": 0.05,
+      "clamp_lcb_min": 0.3,
+      "ood_ratio_ucb_max": 0.95,
+      "downstream_cross_ratio_max": 0.1,
+      "pilot_positive_power_min": 0.8,
+      "negative_false_positive_max": 0.05,
+      "adversarial_false_positive_max": 0.05,
+      "representation_rho_tolerance": 0.08,
+      "representation_min_lowfreq_residual_coherence": 0.2
+    },
+    "primary_endpoints": [
+      "K_V",
+      "K_O",
+      "R_OOD",
+      "negative_control_false_positive_rate",
+      "adversarial_mimic_false_positive_rate"
+    ],
+    "secondary_endpoints": [
+      "input_output_coherence",
+      "empirical_transfer_function",
+      "parametric_rho_B",
+      "nonparametric_rho_B",
+      "spectral_leakage"
+    ],
+    "legacy_threshold_note": "D_star and Omega remain legacy secondary endpoints conceptually; this frequency-domain engine does not redefine them with incompatible proxies."
+  },
+  "source_hashes": {
+    "audit/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "audit/adversarial.py": "505ed439980627b64bb94ab18171129f7667333f4f1807620d1e1615c6041bb5",
+    "audit/bootstrap.py": "61f6a25ecda748d606f1974d1dfa7eb803677499ab7d6b3c125de8f449a37b2c",
+    "audit/decision.py": "5616e2071c00e67cb72af3234e659fe297ab997c397c5084932cb5cdd30bb8ee",
+    "audit/gates.py": "855e0990951eefd2a4623cacb9b527adb3cd320649b32e3c570458ff649c6f6f",
+    "experiment.py": "450ee501b7f1c109c9429f93bb5364630e945ee40aa6ea1be768e2206dd9cb15",
+    "generate_report.py": "3c989c1bd79a3eb022159a4576635814939c16442dc9ffe080204837de00359e",
+    "models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "models/common_driver.py": "fb88c2f86134bf0ab40ea2b68e88aded7e49d866148e1e4ada8d492518d080f1",
+    "models/separate_boundary.py": "3beb5379b1126d9a792ec4ff70caa09c58e108c3089df23bd9f74bcd776d40b1",
+    "models/shared_boundary.py": "8d9a0eef8d9d0a9b23a12c4aead0eff6e06ea39cde8220b286b18e3d908a81e4",
+    "ph/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ph/counterfactuals.py": "222ff863680b22a84acc29066e3ed4d7296380c22d5ba4592ad51ebab217661b",
+    "ph/dynamics.py": "d87c5a4fc5f18257cc7185a7bbe429b5d90cffe7749f9c41d36e4ee9e338e91f",
+    "ph/horizons.py": "deae16562f2b434ef698ae4d0efe0ba0207b52691b51324e7dea8ba86f01bd1f",
+    "ph/interventions.py": "bb09dfe10749ebf925735f0b82179f27f9e5d459ffc07f467a70bf118f1228db",
+    "ph/stimuli.py": "96a601e510bd3f083cbc1d175eadc33bb7a1c2a7a1f485ce3e3d6e32b815f0fa",
+    "run_confirmatory.py": "5bb6f47bb333e877d06ef91d59cbe576e06564568d4f33d29694f7393eccb377",
+    "run_pilot.py": "1d9c64e84265b60e068e3e1ebb3dc973a18d67c9fddebbe206b72341046742e4",
+    "spectral/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "spectral/coherence.py": "7f954eb39e8d2ebf47187a243beb7bfb1d92587699490ef3880194e052633d27",
+    "spectral/fft.py": "d432e602244f274f9fa72d7b74f184b6c3ff5c8cd2b4fae622fb1e7407a5ab99",
+    "spectral/impulse.py": "e8256a7a4a3dae39a52404b8b9a47af9cd7b9ab700b651f072801dd2f0b2e1a7",
+    "spectral/leakage.py": "c7e5015371a0f4a171a2596b85ea10b7731cf8bba863a548404334aac1caf05c",
+    "spectral/parametric.py": "62b6139cd3549e25edd0df96691996deb2d2fa5fb15ba6955d4c176512bed39c",
+    "spectral/transfer.py": "188bce581ac26535c9adac318fa79d5d5893371493ae12f654c70e70fc8eb032",
+    "tests/test_v03.py": "991e91383781aca76c0ab7518f2e7d9c327039b2cee7a2d3e656550b757fb098",
+    "preregistration/ph_v03.yaml": "1232b8640dcfb9561acd8dd8c3a3412748182987d6cbb5b11cabef11be43886e"
+  },
+  "pilot_summary_sha256": "69faa65f961b3d7c7832a37937daca06ba47d7ac68ce08df1248d6a77707a9f3",
+  "freeze_sha256": "5ba55a72e9148c7c03d0e292db2cd8b78cd9788ac4c3f85a38e082a3f84f0874"
+}

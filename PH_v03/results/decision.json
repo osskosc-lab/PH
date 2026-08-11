@@ -1,0 +1,59 @@
+{
+  "version": "PH-v0.3-frequency-causal-specificity-1.0",
+  "decision": "PH-v0.3 SUPPORTED",
+  "freeze_sha256": "5ba55a72e9148c7c03d0e292db2cd8b78cd9788ac4c3f85a38e082a3f84f0874",
+  "pilot": {
+    "positive_detection_rate": 1.0
+  },
+  "controls": {
+    "max_core_negative_fp": 0.0,
+    "adversarial_fp": 0.0
+  },
+  "gates": {
+    "G0_freeze": true,
+    "G1_dynamic_range": true,
+    "G2_saturation": true,
+    "G3_spectral_excitation": true,
+    "G4_positive_control_recovery": true,
+    "G5_negative_control": true,
+    "G6_boundary_clamp": true,
+    "G7_ood_generalization": true,
+    "G8_adversarial_mimic": true,
+    "G9_representation_independence": true,
+    "downstream_specificity": true
+  },
+  "shared_confirmatory": {
+    "stage": "confirmatory",
+    "N": 200,
+    "positive_seed_rate": 1.0,
+    "dynamic_range_pass": true,
+    "saturation_pass": true,
+    "spectral_excitation_pass": true,
+    "leakage_pass": true,
+    "coherence_V_mean": 0.995941515545859,
+    "coherence_O_mean": 0.9953622980352154,
+    "rho_B_parametric": 0.9649567895482802,
+    "tau_B_parametric": 28.03322562813637,
+    "rho_B_nonparam_V": 0.9733528948261976,
+    "rho_B_nonparam_O": 0.970664525382414,
+    "residual_lowfreq_coherence": 0.6693349117060067,
+    "representation_pass": true,
+    "K_V": 0.996533060285032,
+    "K_V_LCB": 0.9964269857443536,
+    "K_V_UCB": 0.9966291078439168,
+    "K_O": 0.9916730229376408,
+    "K_O_LCB": 0.9914539045878068,
+    "K_O_UCB": 0.9919130351411396,
+    "R_OOD": 0.9401823147927568,
+    "R_OOD_LCB": 0.9397875044730596,
+    "R_OOD_UCB": 0.9405612059568424,
+    "V_cross_ratio": 0.0,
+    "V_cross_ratio_LCB": 0.0,
+    "V_cross_ratio_UCB": 0.0,
+    "O_cross_ratio": 0.0,
+    "O_cross_ratio_LCB": 0.0,
+    "O_cross_ratio_UCB": 0.0,
+    "freeze_ok": true
+  },
+  "execution_note": "Confirmatory was executed in per-mode chunks to fit the execution window. Each chunk preserved the original frozen mode index and therefore the preregistered mode-specific noise-code mapping (1000+mi*100 ... 1500+mi*100). Frozen source, config, thresholds, stimuli, seed ranges, and formulas were unchanged."
+}
