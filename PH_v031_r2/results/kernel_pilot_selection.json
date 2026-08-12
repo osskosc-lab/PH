@@ -1,0 +1,47 @@
+{
+  "bandwidth": 0.5,
+  "alpha": 0.01,
+  "cv_rmse": 0.16389934556166857,
+  "pilot_shared_recovery": 0.675,
+  "pilot_max_critical_negative_fp": 0.043333333333333335,
+  "per_mode": {
+    "shared_boundary": 0.675,
+    "separate_boundary": 0.0,
+    "common_driver": 0.0,
+    "viability_only": 0.0,
+    "observability_only": 0.0,
+    "null": 0.0,
+    "adversarial_mimic": 0.0,
+    "adversarial_clamp_mimic": 0.043333333333333335
+  },
+  "R_kernel_point_per_mode": {
+    "shared_boundary": 0.9865501222988995,
+    "separate_boundary": null,
+    "common_driver": null,
+    "viability_only": null,
+    "observability_only": null,
+    "null": null,
+    "adversarial_mimic": null,
+    "adversarial_clamp_mimic": 1.064477771290618
+  },
+  "passed": false,
+  "probability_definition": "paired-bootstrap P(R_kernel < 1.0)",
+  "candidate_scores": [
+    {"rmse": 0.16389934556166857, "bandwidth": 0.5, "alpha": 0.01},
+    {"rmse": 0.1727186980828214, "bandwidth": 0.5, "alpha": 0.001},
+    {"rmse": 0.1738326172514007, "bandwidth": 0.5, "alpha": 0.0001},
+    {"rmse": 0.17394677360094457, "bandwidth": 0.5, "alpha": 0.00001},
+    {"rmse": 0.2249792484495147, "bandwidth": 0.35, "alpha": 0.01},
+    {"rmse": 0.22640128246363492, "bandwidth": 0.35, "alpha": 0.001},
+    {"rmse": 0.22655800740733004, "bandwidth": 0.35, "alpha": 0.0001},
+    {"rmse": 0.22657383271334758, "bandwidth": 0.35, "alpha": 0.00001},
+    {"rmse": 0.3253627352375244, "bandwidth": 0.2, "alpha": 0.00001},
+    {"rmse": 0.3253734927850005, "bandwidth": 0.2, "alpha": 0.0001},
+    {"rmse": 0.3254810582049174, "bandwidth": 0.2, "alpha": 0.001},
+    {"rmse": 0.32655566954106796, "bandwidth": 0.2, "alpha": 0.01},
+    {"rmse": 0.583624679687074, "bandwidth": 0.1, "alpha": 0.00001},
+    {"rmse": 0.5836282066027766, "bandwidth": 0.1, "alpha": 0.0001},
+    {"rmse": 0.5836634585550637, "bandwidth": 0.1, "alpha": 0.001},
+    {"rmse": 0.5840142660166825, "bandwidth": 0.1, "alpha": 0.01}
+  ]
+}

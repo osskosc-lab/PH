@@ -1,0 +1,16 @@
+{
+  "version": "PH-v0.3.1-r2",
+  "seed_registry": {
+    "rows": 320,
+    "sha256": "36becb3a4f727d848d208c46544a5a3d595f4a51dd6e6cfd8a0b6a7c44f86fd3",
+    "overlap_with_registered_v03_v031_ranges": 0,
+    "reproducible_from": "pilot_engine.py::seed_for"
+  },
+  "rng_manifest": {
+    "audited_groups": 1280,
+    "all_groups_paired_across_strengths": true,
+    "logical_manifest_sha256": "6353793f2dff85b9a5b8133152956d5dea3f6a52bc80d63f63628608b3686d9b",
+    "full_local_manifest_file_sha256": "37381c95565cc3f292f4ac6aaa23b8e94ae3b88c6e42ac63971758a2d0a054ad",
+    "reproducible_from": "pilot_engine.py::bundle + bhash"
+  }
+}
