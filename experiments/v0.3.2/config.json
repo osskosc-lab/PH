@@ -1,0 +1,48 @@
+{
+  "version": "PH-v0.3.2",
+  "title": "Dynamic Intervention Fingerprint & Identifiability Falsification",
+  "pilot_n_per_mode_condition": 60,
+  "confirmatory_n_per_mode": 256,
+  "stress_levels": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "train_interventions": ["multisine", "impulse", "PRBS"],
+  "ood_interventions": ["chirp", "unseen_frequencies", "unseen_amplitudes", "burst", "reversed_sequence"],
+  "additional_interventions": ["dual_timescale"],
+  "primary_contrast": ["M0_shared_boundary", "M10_maximal_dynamic_mimic"],
+  "dynamic_distance_weights": {
+    "gain": 0.1666666667,
+    "phase": 0.1666666667,
+    "impulse_response": 0.1666666667,
+    "recovery_time": 0.1666666667,
+    "cross_transfer": 0.1666666667,
+    "direction_asymmetry": 0.1666666665
+  },
+  "confirmatory_thresholds": {
+    "tpr_shared_lcb95_gt": 0.80,
+    "fp_m10_ucb95_lt": 0.05,
+    "fp_separate_ucb95_lt": 0.05,
+    "fp_common_driver_ucb95_lt": 0.05,
+    "dis_lcb95_gt": 1.0,
+    "compound_s_star_gte": 0.50
+  },
+  "representations": [
+    "logistic",
+    "ridge",
+    "capacity_limited_tree_ensemble",
+    "nearest_centroid",
+    "nonparametric_distance"
+  ],
+  "stressors": [
+    "clamp_leakage",
+    "clamp_noise",
+    "measurement_error",
+    "latent_driver",
+    "weak_vo_coupling",
+    "colored_noise",
+    "parameter_drift",
+    "compound"
+  ],
+  "paired_rng": true,
+  "fresh_seed_required": true,
+  "pilot_failure_policy": "STOP_AND_REVISION_WITH_FRESH_PILOT",
+  "confirmatory_model_selection_allowed": false
+}

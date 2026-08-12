@@ -1,0 +1,9 @@
+{
+  "version": "PH-v0.3.2",
+  "status": "UNGENERATED",
+  "rule": "Generate only with run_protocol.py using SHA256 token PH-v0.3.2|stage|mode|condition|index. Legacy overlap must be checked before Pilot execution.",
+  "pilot_n_per_mode_condition": 60,
+  "confirmatory_n_per_mode": 256,
+  "legacy_overlap_required": 0,
+  "paired_rng_required": true
+}
