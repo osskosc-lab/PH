@@ -1,0 +1,74 @@
+version: PH-v0.3.1-r2
+scope: paired-stress and representation-repair confirmatory audit of the PH v0.3.1 detector; not evidence that PH exists in nature
+parent: PH-v0.3.1
+stages:
+  pilot:
+    n_seeds_per_condition: 40
+  confirmatory:
+    n_seeds_per_condition: 200
+modes: [shared_boundary, separate_boundary, common_driver, viability_only, observability_only, null, adversarial_mimic, adversarial_clamp_mimic]
+critical_identification_modes: [shared_boundary, separate_boundary, common_driver, adversarial_clamp_mimic]
+lambdas:
+  all: [0.0, 0.2, 0.4, 0.6, 0.8, 0.9, 1.0]
+  train: [0.0, 0.4, 0.8, 1.0]
+  ood: [0.2, 0.6]
+  extreme_ood: 0.9
+stress:
+  primary_levels: [0.0, 0.25, 0.5, 0.75, 1.0]
+  dense_levels: [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+  dense_factors: [clamp_leakage, latent_driver, compound]
+  factors:
+    clamp_leakage: {max_fraction: 0.50}
+    clamp_noise: {max_sigmaB_ratio: 0.20}
+    measurement_error: {max_K_sd: 0.08}
+    latent_driver: {max_unclamped_to_boundary_ratio: 0.60}
+    weak_vo_coupling: {max_c_vo: 0.20}
+    colored_noise: {max_rho: 0.60}
+    parameter_drift: {max_curvature_shift: 0.18}
+  compound:
+    factors: [clamp_leakage, latent_driver, colored_noise]
+    confirmatory_level: 0.50
+baseline_response:
+  efficacy_sd_shared: 0.08
+  efficacy_sd_adversarial: 0.30
+  curvature_mean: 0.12
+  curvature_sd_shared: 0.04
+  curvature_sd_adversarial: 0.15
+  output_curvature_jitter: 0.008
+  estimator_noise_sd: 0.025
+  raw_margin_scale: 0.70
+  raw_margin_noise_sd: 0.020
+  raw_clip_limit: 1.20
+analysis:
+  bootstrap_reps_pilot: 600
+  bootstrap_reps_confirmatory: 1500
+  beta_lcb_min: 0.0
+  K_at_08_min: 0.50
+  R_lambda_OOD_ucb_max: 0.95
+  R_CIC_ucb_max: 1.0
+  kernel_ratio_max: 1.0
+  kernel_shared_recovery_min: 0.80
+  kernel_negative_fp_max: 0.05
+  positive_control_recovery_min: 0.80
+  negative_false_positive_max: 0.05
+  operating_accuracy_min: 0.80
+  dynamic_range_sd_min: 0.03
+  raw_saturation_fraction_max: 0.05
+  downstream_cross_ratio_max: 0.10
+kernel:
+  bandwidth_candidates: [0.10, 0.20, 0.35, 0.50]
+  alpha_candidates: [0.00001, 0.0001, 0.001, 0.01]
+  tie_break: [larger_alpha, larger_bandwidth]
+seed_registry:
+  algorithm: sha256_32bit
+  format: "PH-v0.3.1-r2|stage|mode|condition|index"
+  forbidden_ranges:
+    - [202603300, 202603329]
+    - [202603800, 202603999]
+    - [202631100, 202631139]
+    - [202631800, 202631999]
+final_decision:
+  robust: technical gates G0-G11 and G13 pass; critical negative FP <= 0.05; G10 pass; compound P_correct at 0.50 >= 0.80
+  fragile: G0-G11 and G13 pass but compound P_correct at 0.50 < 0.80
+  falsified: adequate-power core false positive in separate/common-driver/adversarial clamp mimic, or shared core dose response fails
+  inconclusive: raw-margin saturation, seed contamination, paired RNG failure, kernel pilot validation failure, representation technical failure, numerical instability
