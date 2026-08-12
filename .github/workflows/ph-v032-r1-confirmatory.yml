@@ -30,19 +30,26 @@ jobs:
           python -m py_compile experiments/v0.3.2/ph_v032_pilot.py
           python -m py_compile experiments/v0.3.2-r1/ph_v032_r1_pilot.py
           python -m py_compile experiments/v0.3.2-r1-confirmatory/run_confirmatory.py
+          python -m py_compile experiments/v0.3.2-r1-confirmatory/run_confirmatory_replayfix.py
 
-      - name: Verify Confirmatory protocol hash
+      - name: Verify frozen protocol and technical repair hashes
         run: |
           python - <<'PY'
           import hashlib,json
           from pathlib import Path
           root=Path("experiments/v0.3.2-r1-confirmatory")
           freeze=json.loads((root/"freeze.json").read_text())
-          got=hashlib.sha256((root/"run_confirmatory.py").read_bytes()).hexdigest()
-          want=freeze["confirmatory_protocol_sha256"]
-          if got != want:
-              raise SystemExit(f"confirmatory protocol hash mismatch: {got} != {want}")
-          print("Confirmatory protocol verified:", got)
+          checks={
+              "run_confirmatory.py": freeze["confirmatory_protocol_sha256"],
+              "run_confirmatory_replayfix.py": freeze["technical_repair_sha256"],
+          }
+          for name,want in checks.items():
+              got=hashlib.sha256((root/name).read_bytes()).hexdigest()
+              if got != want:
+                  raise SystemExit(f"protocol hash mismatch: {name}: {got} != {want}")
+              print("verified",name,got)
+          if freeze["technical_repair"]["confirmatory_data_generated_before_repair"]:
+              raise SystemExit("technical repair invalid: Confirmatory data had already been generated")
           PY
 
       - name: Run frozen fresh Confirmatory
@@ -50,7 +57,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python experiments/v0.3.2-r1-confirmatory/run_confirmatory.py \
+          python experiments/v0.3.2-r1-confirmatory/run_confirmatory_replayfix.py \
             --outdir experiments/v0.3.2-r1-confirmatory/artifacts/confirmatory
           code=$?
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
