@@ -1,0 +1,18 @@
+{
+  "version": "PH-v0.3.2",
+  "pilot": {
+    "TPR_shared_gte": 0.80,
+    "FP_M10_lte": 0.05,
+    "FP_M1_lte": 0.05,
+    "FP_M2_lte": 0.05,
+    "FP_M5_lte": 0.05
+  },
+  "confirmatory": {
+    "LCB95_TPR_shared_gt": 0.80,
+    "UCB95_FP_M10_lt": 0.05,
+    "UCB95_FP_M1_lt": 0.05,
+    "UCB95_FP_M2_lt": 0.05,
+    "LCB95_DIS_gt": 1.0,
+    "compound_s_star_gte": 0.50
+  }
+}
