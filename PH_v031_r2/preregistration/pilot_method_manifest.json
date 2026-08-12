@@ -1,0 +1,13 @@
+{
+  "version": "PH-v0.3.1-r2",
+  "source_hashes": {
+    "ph_v031_r2.py": "d8e13cd2dc419e0889461960d738a3a1c2882683ce674767cd6c09e8978756ff",
+    "compact_audit.py": "15a4e9d719f4bfcaf31b4fb3fe0f6433da79ffec4ab20e94441bd921aa6400e0",
+    "run_pilot.py": "a4ff6d520e50fd52587689cf53cdfd4c3ac05ca9cf8fed9c546f9e09fbfb980f",
+    "run_confirmatory.py": "4579595279be8ca1b9b7b20e348793a3b63b01ec5ffe6c1ffd065ac6e0e2b357",
+    "tests/test_r2.py": "9af1daff194db7cca8ca4fbee741a0df5159e67127061f5f64818e976008dd74",
+    "preregistration/ph_v031_r2.yaml": "1f71232c0a1bf1a2bd5df9c058a0d94e66711ce84a53b45066ed4f75f16c83c5"
+  },
+  "pilot_method_sha256": "3cf5ea58a5a9bf6fa47ce2a4cae04fed2399d6eb726f1016b54652e4aa851e5d",
+  "note": "Pilot method manifest only; no confirmatory freeze was created because Kernel Pilot Gate failed. Hashes are of the committed GitHub byte representation verified in CI."
+}

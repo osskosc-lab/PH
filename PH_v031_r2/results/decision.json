@@ -1,0 +1,20 @@
+{
+  "version": "PH-v0.3.1-r2",
+  "decision": "INCONCLUSIVE",
+  "confirmatory_started": false,
+  "reason": "kernel representation method not validated",
+  "pilot_gate": {
+    "kernel_choice": {
+      "h": 0.5,
+      "alpha": 0.0001,
+      "pilot_loo_rmse": 0.010976191075403019
+    },
+    "P_kernel_shared": 0.48333333333333334,
+    "FP_kernel_separate": 0.0,
+    "FP_kernel_common": 0.0,
+    "FP_kernel_adversarial": 0.3933333333333333,
+    "legacy_seed_overlap": 0,
+    "kernel_validated": false,
+    "paired_rng_integrity": true
+  }
+}
