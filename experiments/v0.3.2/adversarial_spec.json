@@ -6,11 +6,20 @@
     "M9": {"name": "phase_mimic", "matches": ["dose_response_means", "gain_spectra", "representative_phase"]},
     "M10": {
       "name": "maximal_dynamic_mimic",
-      "objective": "minimize preregistered dynamic fingerprint distance to M0",
-      "parameter_bounds": "MUST_BE_FIXED_BEFORE_PILOT_EXECUTION",
+      "objective": "minimize preregistered standardized dynamic fingerprint mean distance to M0 on tuning indices 0-19 and train interventions only",
+      "parameter_bounds": {
+        "av": [0.76, 0.82, 0.88],
+        "ao": [0.74, 0.81, 0.87],
+        "gv": [0.30, 0.36],
+        "go": [0.28, 0.34]
+      },
+      "grid_size": 36,
+      "tuning_indices": [0, 19],
+      "classifier_training_indices": [20, 39],
+      "gate_evaluation_indices": [40, 59],
       "confirmatory_data_use": "FORBIDDEN",
-      "latent_mechanism": "independent_or_nonshared_by_construction"
+      "latent_mechanism": "independent V and O latent boundary processes by construction"
     }
   },
-  "anti_weakening_rule": "After Pilot inspection, adversarial constraints may not be weakened for Confirmatory. Any change creates a new revision with fresh Pilot seeds."
+  "anti_weakening_rule": "After Pilot inspection, adversarial constraints, thresholds, features, classifier rules, or parameter bounds may not be changed for Confirmatory. Any change creates v0.3.2-r1 with fresh Pilot seeds."
 }
