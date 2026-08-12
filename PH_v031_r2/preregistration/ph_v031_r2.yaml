@@ -1,0 +1,62 @@
+version: PH-v0.3.1-r2
+scope: Paired-Stress & Representation-Repair Confirmatory Experiment; synthetic detector audit only
+parent: PH-v0.3.1-imperfect-intervention-identifiability-1.0
+stages:
+  pilot: {n_seeds_per_condition: 40, seed_namespace: official1}
+  confirmatory: {n_seeds_per_condition: 200, seed_namespace: official1}
+modes: [shared_boundary, separate_boundary, common_driver, viability_only, observability_only, null, adversarial_mimic, adversarial_clamp_mimic]
+critical_identification_modes: [shared_boundary, separate_boundary, common_driver, adversarial_clamp_mimic]
+lambdas:
+  all: [0.0, 0.2, 0.4, 0.6, 0.8, 0.9, 1.0]
+  train: [0.0, 0.4, 0.8, 1.0]
+  ood: [0.2, 0.6]
+  extreme_ood: 0.9
+stress:
+  normalized_levels: [0.0, 0.25, 0.50, 0.75, 1.0]
+  dense_levels: [0.0, 0.125, 0.25, 0.375, 0.50, 0.625, 0.75, 0.875, 1.0]
+  dense_factors: [clamp_leakage, latent_driver, compound]
+  factors:
+    clamp_leakage: {max_fraction: 0.50}
+    clamp_noise: {max_sigmaB_ratio: 0.20}
+    measurement_error: {max_K_sd: 0.08}
+    latent_driver: {max_unclamped_to_boundary_ratio: 0.60}
+    weak_vo_coupling: {max_c_vo: 0.20}
+    colored_noise: {max_rho: 0.60}
+    parameter_drift: {max_curvature_shift: 0.18}
+  compound:
+    factors: [clamp_leakage, latent_driver, colored_noise]
+    confirmatory_level: 0.50
+baseline_response:
+  efficacy_sd_shared: 0.08
+  efficacy_sd_adversarial: 0.30
+  curvature_mean: 0.12
+  curvature_sd_shared: 0.04
+  curvature_sd_adversarial: 0.15
+  output_curvature_jitter: 0.008
+  estimator_noise_sd: 0.025
+analysis:
+  bootstrap_reps_pilot: 600
+  bootstrap_reps_confirmatory: 1500
+  beta_lcb_min: 0.0
+  K_at_08_min: 0.50
+  R_lambda_OOD_ucb_max: 0.95
+  R_CIC_ucb_max: 1.00
+  positive_control_recovery_min: 0.80
+  negative_false_positive_max: 0.05
+  operating_accuracy_min: 0.80
+  dynamic_range_sd_min: 0.03
+  raw_clip_abs: 1.20
+  raw_saturation_fraction_max: 0.05
+  downstream_cross_ratio_max: 0.10
+  kernel_ratio_max: 1.00
+  kernel_min_response_span: 0.15
+  kernel_h_candidates: [0.10, 0.20, 0.35, 0.50]
+  kernel_alpha_candidates: [1.0e-5, 1.0e-4, 1.0e-3, 1.0e-2]
+  kernel_pilot_positive_min: 0.80
+  kernel_pilot_negative_fp_max: 0.05
+  nonparametric_monotonic_min: 0.80
+legacy_seed_ranges:
+  - [202603300, 202603329]
+  - [202603800, 202603999]
+  - [202631100, 202631139]
+  - [202631800, 202631999]
