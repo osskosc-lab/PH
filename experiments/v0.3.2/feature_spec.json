@@ -1,0 +1,20 @@
+{
+  "version": "PH-v0.3.2",
+  "features": {
+    "gain": ["G_V(f)", "G_O(f)"],
+    "phase": ["phi_V(f)", "phi_O(f)"],
+    "impulse_response": ["h_V(tau)", "h_O(tau)"],
+    "recovery_time": ["tau_V", "tau_O"],
+    "cross_transfer": ["C_VO(f)"],
+    "direction_asymmetry": ["A_B"],
+    "hysteresis": ["ascending_vs_descending_path_difference"]
+  },
+  "hysteresis_paths": {
+    "ascending": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "descending": [1.0, 0.75, 0.5, 0.25, 0.0]
+  },
+  "standardization": "fit_on_pilot_training_only_then_freeze",
+  "primary_distance_components": ["gain", "phase", "impulse_response", "recovery_time", "cross_transfer", "direction_asymmetry"],
+  "primary_weights": "equal_1_over_6",
+  "confirmatory_feature_addition_allowed": false
+}
