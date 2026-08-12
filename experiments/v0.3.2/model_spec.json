@@ -1,0 +1,20 @@
+{
+  "version": "PH-v0.3.2",
+  "models": {
+    "M0": "shared_boundary",
+    "M1": "separate_boundary",
+    "M2": "common_driver",
+    "M3": "viability_only",
+    "M4": "observability_only",
+    "M5": "null",
+    "M6": "sensor_measurement_artifact",
+    "M7": "static_clamp_mimic",
+    "M8": "spectral_mimic",
+    "M9": "phase_mimic",
+    "M10": "maximal_dynamic_mimic"
+  },
+  "primary_positive": "M0",
+  "primary_adversary": "M10",
+  "m10_rule": "optimize only inside preregistered parameter bounds using Pilot-side objective; Confirmatory data forbidden",
+  "latent_independence_requirement_for_mimics": true
+}
