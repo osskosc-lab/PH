@@ -1,0 +1,76 @@
+name: PH v0.3.2-r1 Confirmatory
+
+on:
+  push:
+    branches:
+      - experiment/ph-v0.3.2-r1-confirmatory
+    paths:
+      - "experiments/v0.3.2-r1-confirmatory/**"
+      - ".github/workflows/ph-v032-r1-confirmatory.yml"
+  workflow_dispatch:
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install frozen runtime
+        run: python -m pip install -r experiments/v0.3.2-r1/requirements.txt
+
+      - name: Compile frozen and confirmatory entrypoints
+        run: |
+          python -m py_compile experiments/v0.3.2/ph_v032_pilot.py
+          python -m py_compile experiments/v0.3.2-r1/ph_v032_r1_pilot.py
+          python -m py_compile experiments/v0.3.2-r1-confirmatory/run_confirmatory.py
+
+      - name: Verify Confirmatory protocol hash
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path("experiments/v0.3.2-r1-confirmatory")
+          freeze=json.loads((root/"freeze.json").read_text())
+          got=hashlib.sha256((root/"run_confirmatory.py").read_bytes()).hexdigest()
+          want=freeze["confirmatory_protocol_sha256"]
+          if got != want:
+              raise SystemExit(f"confirmatory protocol hash mismatch: {got} != {want}")
+          print("Confirmatory protocol verified:", got)
+          PY
+
+      - name: Run frozen fresh Confirmatory
+        id: run
+        shell: bash
+        run: |
+          set +e
+          python experiments/v0.3.2-r1-confirmatory/run_confirmatory.py \
+            --outdir experiments/v0.3.2-r1-confirmatory/artifacts/confirmatory
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload Confirmatory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ph-v0.3.2-r1-confirmatory
+          path: experiments/v0.3.2-r1-confirmatory/artifacts/confirmatory/
+          if-no-files-found: error
+
+      - name: Enforce technical integrity
+        if: always()
+        shell: bash
+        run: |
+          code='${{ steps.run.outputs.exit_code }}'
+          if [ -z "$code" ]; then
+            echo "Confirmatory did not return an exit code"
+            exit 3
+          fi
+          exit "$code"
