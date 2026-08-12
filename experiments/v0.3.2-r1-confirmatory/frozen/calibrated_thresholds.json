@@ -1,0 +1,32 @@
+{
+  "balanced_logistic": {
+    "threshold": 1.1891711734690704,
+    "feasible": true,
+    "calibration_tpr_M0": 1.0,
+    "calibration_worst_fp": 0.1
+  },
+  "balanced_ridge": {
+    "threshold": 0.43101464694721325,
+    "feasible": true,
+    "calibration_tpr_M0": 1.0,
+    "calibration_worst_fp": 0.1
+  },
+  "shrinkage_diagonal_lda": {
+    "threshold": 5.692187318564546,
+    "feasible": true,
+    "calibration_tpr_M0": 1.0,
+    "calibration_worst_fp": 0.1
+  },
+  "balanced_centroid": {
+    "threshold": 9.209637334848237,
+    "feasible": true,
+    "calibration_tpr_M0": 0.95,
+    "calibration_worst_fp": 0.1
+  },
+  "balanced_nonparametric_distance": {
+    "threshold": -4.893932169444659,
+    "feasible": true,
+    "calibration_tpr_M0": 0.9,
+    "calibration_worst_fp": 0.0
+  }
+}
