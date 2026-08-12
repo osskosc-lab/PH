@@ -5,6 +5,7 @@ import csv
 import hashlib
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +25,7 @@ _spec = importlib.util.spec_from_file_location("ph_v032_base", BASE_PATH)
 if _spec is None or _spec.loader is None:
     raise RuntimeError(f"cannot load base implementation: {BASE_PATH}")
 base = importlib.util.module_from_spec(_spec)
+sys.modules[_spec.name] = base
 _spec.loader.exec_module(base)
 
 # Fresh namespace, while retaining the exact v0.3.2 dynamics, M10 grid and 35-feature extractor.
@@ -267,10 +269,7 @@ def seed_integrity():
 
 def run_pilot(outdir: Path) -> int:
     outdir.mkdir(parents=True, exist_ok=True)
-
-    # Fresh Pilot-side adversary tuning, exact carry-over grid/objective.
     opt_score, m10 = base.optimize_m10()
-
     X, rows, feature_names = build_aggregate_dataset(m10)
     y = np.array([1 if mode == "M0" else 0 for mode, _ in rows], dtype=int)
     fit_mask = split_mask(rows, FIT)
@@ -279,7 +278,6 @@ def run_pilot(outdir: Path) -> int:
 
     mu, sd = fit_standard(X[fit_mask])
     Z = (X - mu) / sd
-    fit_rows = [r for r, keep in zip(rows, fit_mask) if keep]
     cal_rows = [r for r, keep in zip(rows, cal_mask) if keep]
     eval_rows = [r for r, keep in zip(rows, eval_mask) if keep]
 
