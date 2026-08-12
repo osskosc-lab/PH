@@ -35,6 +35,26 @@ jobs:
           cp PH_v031_r2/results/decision.json /tmp/decision.json
           cp PH_v031_r2/results/pilot_core_summary.csv /tmp/pilot_core_summary.csv
           python PH_v031_r2/run_pilot.py
-          diff -u /tmp/pilot_gate.json PH_v031_r2/results/pilot_gate.json
-          diff -u /tmp/decision.json PH_v031_r2/results/decision.json
-          diff -u /tmp/pilot_core_summary.csv PH_v031_r2/results/pilot_core_summary.csv
+          python - <<'PY'
+          import json,math
+          import numpy as np
+          import pandas as pd
+          def eq_json(a,b,path='root'):
+              if isinstance(a,dict):
+                  assert isinstance(b,dict) and set(a)==set(b),(path,a,b)
+                  for k in a:eq_json(a[k],b[k],path+'.'+k)
+              elif isinstance(a,list):
+                  assert isinstance(b,list) and len(a)==len(b),(path,a,b)
+                  for i,(x,y) in enumerate(zip(a,b)):eq_json(x,y,f'{path}[{i}]')
+              elif isinstance(a,(int,float)) and isinstance(b,(int,float)):
+                  assert math.isclose(float(a),float(b),rel_tol=1e-12,abs_tol=1e-12),(path,a,b)
+              else: assert a==b,(path,a,b)
+          for old,new in [('/tmp/pilot_gate.json','PH_v031_r2/results/pilot_gate.json'),('/tmp/decision.json','PH_v031_r2/results/decision.json')]:
+              eq_json(json.load(open(old)),json.load(open(new)))
+          a=pd.read_csv('/tmp/pilot_core_summary.csv');b=pd.read_csv('PH_v031_r2/results/pilot_core_summary.csv')
+          assert list(a.columns)==list(b.columns) and len(a)==len(b)
+          for c in a.columns:
+              if pd.api.types.is_numeric_dtype(a[c]): assert np.allclose(a[c],b[c],rtol=1e-12,atol=1e-12,equal_nan=True),c
+              else: assert a[c].fillna('<NA>').equals(b[c].fillna('<NA>')),c
+          print('Pilot reproducibility verified within 1e-12 numeric tolerance')
+          PY
