@@ -1,0 +1,26 @@
+name: PH v0.3.1-r2 checks
+on:
+  pull_request:
+    paths:
+      - 'PH_v031_r2/**'
+      - '.github/workflows/ph-v031-r2.yml'
+  workflow_dispatch:
+jobs:
+  pilot-reproducibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r PH_v031_r2/requirements.txt
+      - run: pytest -q PH_v031_r2/tests/test_r2.py
+      - name: Re-run deterministic Pilot
+        run: |
+          cp PH_v031_r2/results/pilot_gate.json /tmp/pilot_gate.json
+          cp PH_v031_r2/results/decision.json /tmp/decision.json
+          cp PH_v031_r2/results/pilot_core_summary.csv /tmp/pilot_core_summary.csv
+          python PH_v031_r2/run_pilot.py
+          diff -u /tmp/pilot_gate.json PH_v031_r2/results/pilot_gate.json
+          diff -u /tmp/decision.json PH_v031_r2/results/decision.json
+          diff -u /tmp/pilot_core_summary.csv PH_v031_r2/results/pilot_core_summary.csv
