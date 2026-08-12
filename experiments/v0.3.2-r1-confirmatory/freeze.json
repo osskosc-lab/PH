@@ -1,0 +1,95 @@
+{
+  "version": "PH-v0.3.2-r1-confirmatory",
+  "freeze_status": "FROZEN_AFTER_PILOT_PASS",
+  "parent_pilot": {
+    "version": "PH-v0.3.2-r1",
+    "decision": "PILOT_PASS_FREEZE_ALLOWED",
+    "execution_commit": "c3fdc214674dfc92ee43235cff3af648c40502f0",
+    "result_commit": "32b62bc785c732ba75605687b6c5d8a46142cb09",
+    "pilot_artifact_id": 9129144063,
+    "pilot_artifact_zip_sha256": "08914a11edd9ec56d6a21e480024d8374eeb12d1d7e8e3d9f899aa8c5f7c9075"
+  },
+  "pilot_artifact_id": 9129144063,
+  "pilot_artifact_zip_sha256": "08914a11edd9ec56d6a21e480024d8374eeb12d1d7e8e3d9f899aa8c5f7c9075",
+  "pilot_artifact_members": {
+    "standardization.json": "249e5175275513d01ee581db2a3668936bcf8fe1eac6789e3364084dc2cd99bd",
+    "calibrated_thresholds.json": "5d173ead6ebf6760bc311964b603f73ad5d50fe55cde8b3b6f7fec9ac2973591",
+    "m10_frozen_from_fresh_tuning.json": "5d4fb0355b23870b248f2484ed812209fea56f01eac9777b82746c8bdb4e320d",
+    "pilot_result.json": "846f51edb3fdc4de971781ae3932431132f1caea8d7606808b885d9ea1e893e1",
+    "representation_confusion.csv": "7ff6f693d4b32d8e533471491bee6237a10b754b45d929090dbc7417689eed3f",
+    "python_structure.json": "f629d6a9afe0efad6cf1318990c4822829658a43a97f8aaeb0daa39fc936b600"
+  },
+  "source_git_blobs": {
+    "experiments/v0.3.2/ph_v032_pilot.py": "3a060130d40a1db940fbc1ffbcc5add41c355dee",
+    "experiments/v0.3.2-r1/ph_v032_r1_pilot.py": "a18c90e9251b2c4d5418aca17466e46db8b23ef7"
+  },
+  "confirmatory_protocol_sha256": "c211971efd9a6e97ff1234f8e6ae7b08f9a0426430e113c3555a30598b00d241",
+  "frozen_m10": {
+    "av": 0.88,
+    "ao": 0.87,
+    "gv": 0.36,
+    "go": 0.34
+  },
+  "pilot_m10_objective": 0.1921466813636111,
+  "thresholds": {
+    "balanced_logistic": {
+      "threshold": 1.1891711734690704,
+      "feasible": true,
+      "calibration_tpr_M0": 1.0,
+      "calibration_worst_fp": 0.1
+    },
+    "balanced_ridge": {
+      "threshold": 0.43101464694721325,
+      "feasible": true,
+      "calibration_tpr_M0": 1.0,
+      "calibration_worst_fp": 0.1
+    },
+    "shrinkage_diagonal_lda": {
+      "threshold": 5.692187318564546,
+      "feasible": true,
+      "calibration_tpr_M0": 1.0,
+      "calibration_worst_fp": 0.1
+    },
+    "balanced_centroid": {
+      "threshold": 9.209637334848237,
+      "feasible": true,
+      "calibration_tpr_M0": 0.95,
+      "calibration_worst_fp": 0.1
+    },
+    "balanced_nonparametric_distance": {
+      "threshold": -4.893932169444659,
+      "feasible": true,
+      "calibration_tpr_M0": 0.9,
+      "calibration_worst_fp": 0.0
+    }
+  },
+  "confirmatory": {
+    "N_per_mode": 256,
+    "seed_namespace": "PH-v0.3.2-r1|confirmatory",
+    "core_conditions": [
+      "multisine",
+      "impulse",
+      "PRBS"
+    ],
+    "ood_conditions": [
+      "chirp",
+      "unseen_frequencies",
+      "unseen_amplitudes",
+      "burst",
+      "reversed_sequence"
+    ],
+    "primary_representation": "balanced_logistic",
+    "primary_positive_rule": "LCB95(TPR_M0)>0.80",
+    "primary_m10_rule": "UCB95(FP_M10)<0.05",
+    "basic_negative_rule": "UCB95(FP_M1/M2/M5)<0.05",
+    "representation_consensus_rule": "at least 3 preregistered families pass core and OOD M0/M10 bounds"
+  },
+  "prohibitions": [
+    "no M10 re-optimization",
+    "no threshold recalibration",
+    "no representation selection",
+    "no feature addition/removal",
+    "no standardization refit on confirmatory data",
+    "no seed reuse from Pilot"
+  ]
+}
