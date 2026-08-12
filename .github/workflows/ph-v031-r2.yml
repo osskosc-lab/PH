@@ -15,6 +15,20 @@ jobs:
           python-version: '3.12'
       - run: pip install -r PH_v031_r2/requirements.txt
       - run: pytest -q PH_v031_r2/tests/test_r2.py
+      - name: Verify Pilot method hashes
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('PH_v031_r2')
+          m=json.loads((root/'preregistration'/'pilot_method_manifest.json').read_text())
+          bad=[]
+          for rel,want in m['source_hashes'].items():
+              got=hashlib.sha256((root/rel).read_bytes()).hexdigest()
+              if got!=want: bad.append((rel,want,got))
+          if bad: raise SystemExit('Pilot method hash mismatch: '+repr(bad))
+          print('Pilot method verified:',m['pilot_method_sha256'])
+          PY
       - name: Re-run deterministic Pilot
         run: |
           cp PH_v031_r2/results/pilot_gate.json /tmp/pilot_gate.json
