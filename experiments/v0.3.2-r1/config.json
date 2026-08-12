@@ -1,0 +1,40 @@
+{
+  "version": "PH-v0.3.2-r1",
+  "pilot_n_per_mode_condition": 80,
+  "splits": {
+    "m10_tuning": [0, 19],
+    "representation_fit": [20, 39],
+    "threshold_calibration": [40, 59],
+    "gate_evaluation": [60, 79]
+  },
+  "carry_over": {
+    "dynamics": "unchanged_from_v0.3.2",
+    "m10_grid": "unchanged_36_point_grid",
+    "raw_feature_extractor": "unchanged_35_features",
+    "train_interventions": ["multisine", "impulse", "PRBS"]
+  },
+  "aggregate_representation": "featurewise_mean_and_std_across_3_train_interventions",
+  "aggregate_feature_count": 70,
+  "class_balance": "equal_total_weight_positive_and_pooled_negative",
+  "representations": [
+    "balanced_logistic",
+    "balanced_ridge",
+    "shrinkage_diagonal_lda",
+    "balanced_centroid",
+    "balanced_nonparametric_distance"
+  ],
+  "primary_representation": "balanced_logistic",
+  "threshold_calibration": {
+    "data": "indices_40_59_only",
+    "constraint": "TPR_M0_gte_0.80",
+    "objective": "minimize_max_FP_over_M10_M1_M2_M5",
+    "tie_break": ["higher_TPR", "higher_threshold"]
+  },
+  "pilot_gates": {
+    "G3_TPR_M0_gte": 0.80,
+    "G4_FP_M10_lte": 0.05,
+    "G5_FP_M1_M2_M5_lte": 0.05,
+    "G6_min_passing_representations": 3
+  },
+  "stop_rule": "ANY_GATE_FAILURE_STOP_AND_REQUIRE_V0.3.2-R2_WITH_FRESH_PILOT"
+}
