@@ -1,11 +1,19 @@
 {
   "version": "PH-v0.3.2",
   "confidence_level": 0.95,
+  "pilot_split": {
+    "m10_tuning": "indices 0-19; train interventions only",
+    "classifier_training": "indices 20-39; train interventions only",
+    "gate_evaluation": "indices 40-59; train interventions only",
+    "rule": "No sample is reused across M10 tuning, classifier fitting, and Gate evaluation roles."
+  },
+  "primary_representation": "logistic",
   "primary_metrics": ["TPR_shared", "FP_M10", "DIS"],
   "secondary_metrics": ["mutual_information_binary_M0_vs_M10", "confusion_matrix", "OOD_retention", "DIS_by_stress", "s_star"],
   "representation_consensus": {
     "families": ["logistic", "ridge", "capacity_limited_tree_ensemble", "nearest_centroid", "nonparametric_distance"],
-    "rule": "report all frozen families; no confirmatory selection; require at least two distinct representation families to reproduce the primary conclusion"
+    "pilot_rule": "at least 3 of 5 frozen representations must have TPR_shared>=0.70, FP_M10<=0.15, and TPR_shared>FP_M10 on the untouched Gate split",
+    "confirmatory_rule": "report all frozen families; no confirmatory selection; require at least two distinct representation families to reproduce the primary conclusion"
   },
   "information_theory_role": "diagnostic_only_not_sufficient_for_PASS",
   "decision_states": ["IDENTIFIABLE", "FRAGILE_IDENTIFIABLE", "NON_IDENTIFIABLE", "INCONCLUSIVE"],
