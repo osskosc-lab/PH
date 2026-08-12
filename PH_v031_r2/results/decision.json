@@ -1,0 +1,27 @@
+{
+  "version": "PH-v0.3.1-r2",
+  "decision": "INCONCLUSIVE",
+  "stage": "PILOT_STOP",
+  "confirmatory_started": false,
+  "freeze_sha256": null,
+  "reason": "Kernel Pilot validation failure: shared bootstrap recovery below preregistered 0.80 threshold.",
+  "kernel_pilot": {
+    "bandwidth": 0.5,
+    "alpha": 0.01,
+    "R_kernel_point_shared": 0.9865501222988995,
+    "P_kernel_shared": 0.675,
+    "max_critical_negative_FP_kernel": 0.043333333333333335
+  },
+  "technical_repairs": {
+    "raw_margin_saturation_max_fraction": 0.0035714285714285713,
+    "paired_rng_integrity": true,
+    "seed_overlap_prior_ranges": 0
+  },
+  "gates": {
+    "G0b_paired_rng_integrity": true,
+    "G2_raw_margin_saturation": true,
+    "Kernel_Pilot_Positive_Recovery": false,
+    "Kernel_Pilot_Negative_FP": true,
+    "Confirmatory_Freeze": false
+  }
+}
