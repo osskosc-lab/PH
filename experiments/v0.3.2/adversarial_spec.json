@@ -1,0 +1,16 @@
+{
+  "version": "PH-v0.3.2",
+  "adversaries": {
+    "M7": {"name": "static_clamp_mimic", "matches": ["dose_response_means", "K_V", "K_O"]},
+    "M8": {"name": "spectral_mimic", "matches": ["dose_response_means", "gain_spectra"]},
+    "M9": {"name": "phase_mimic", "matches": ["dose_response_means", "gain_spectra", "representative_phase"]},
+    "M10": {
+      "name": "maximal_dynamic_mimic",
+      "objective": "minimize preregistered dynamic fingerprint distance to M0",
+      "parameter_bounds": "MUST_BE_FIXED_BEFORE_PILOT_EXECUTION",
+      "confirmatory_data_use": "FORBIDDEN",
+      "latent_mechanism": "independent_or_nonshared_by_construction"
+    }
+  },
+  "anti_weakening_rule": "After Pilot inspection, adversarial constraints may not be weakened for Confirmatory. Any change creates a new revision with fresh Pilot seeds."
+}
