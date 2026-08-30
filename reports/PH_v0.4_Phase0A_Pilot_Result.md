@@ -64,11 +64,12 @@ M11-CにはM0のhidden stateを与えていない。M11-UはM0のobservable trac
 
 - Repository: `osskosc-lab/PH`
 - PR: [#10](https://github.com/osskosc-lab/PH/pull/10)
-- Branch commit: `87e45a2403c77d4daa6ae255f4235ea83be68711`
-- GitHub Actions run: `33291032606`
+- Experiment code commit: `87e45a2403c77d4daa6ae255f4235ea83be68711`
+- Report/provenance commit: `e5105933b54eb883a85e31cea71d0ac3cd4fde16`
+- GitHub Actions validation run: `33291084181`
 - Workflow conclusion: `success`
-- Artifact ID: `9725965038`
-- Artifact ZIP SHA256: `e98d6ac6f5eeea445578b4763ad9f7ac1d86e1f39d356844eda2411e48e77cdc`
+- Artifact ID: `9725982089`
+- Artifact ZIP SHA256: `478106a379a5b34a3503b558863ff25db42179fb17f97096cdae5f7bb2c71510`
 - Config SHA256: `e28af7a433f2b22b30f9c660b9b0897c3bae05f77f5a1e0ea867f562887cf782`
 - Preregistration SHA256: `53317d9c2bd5f884897e4a72ed329356cb0bf3b4c225be66ebef66d594491a5d`
 - Full replay comparison: `PASS`
