@@ -1,0 +1,83 @@
+{
+  "title": "PH v0.4 Phase 0A Targeted-Access Identifiability Falsification Experiment",
+  "version": "1.0",
+  "language": "Japanese",
+  "research_mode": "falsification_first",
+  "frozen_prior": {
+    "status": "NON_IDENTIFIABLE at the single shared-boundary node identity level under A0",
+    "source": "PH v0.3.3-r1",
+    "confirmatory_prohibited": true
+  },
+  "primary_question": "A1 selective local interventions J_V and J_Oを追加したとき、M0とscientifically constrained duplicated-state M11-Cのinterventional equivalenceを破れるか。",
+  "access": {
+    "A0": "Fast/Slow external interventions plus V/O observations",
+    "A1": "A0 plus J_V and J_O local interventions near candidate boundary pathways",
+    "profiles": ["impulse", "finite_pulse", "PRBS", "multisine"],
+    "amplitudes": [0.5, 1.0],
+    "target_label_randomization": "internal V/O parameter-slot labels are permuted per seed, identically across models, with no model-identity input"
+  },
+  "models": {
+    "M0": "one latent B shared by V and O",
+    "M11-U": "unrestricted oracle duplicated-state clone; may copy M0 local effects and is a canary only",
+    "M11-C": "duplicated Z_V/Z_O states with pre-frozen measured local leakage, shared innovation, and cross-output coupling bounds",
+    "M10": "legacy maximal dynamic mimic without new local cross paths",
+    "M1": "separate boundary",
+    "M2": "common driver without local cross paths",
+    "M_CD": "common driver alternative",
+    "M_NULL": "null"
+  },
+  "calibration": {
+    "indices": [0, 23],
+    "plant_is_model_independent": true,
+    "cross_talk_metric": "norm(direct opposite-side actuator response) / norm(direct target-side actuator response)",
+    "c_max_rule": "min(cross_talk_cap, cross_talk_margin * 95th percentile calibration ratio)",
+    "registered_bounds": {
+      "shared_innovation_max": 0.25,
+      "cross_output_coupling_max": 0.20
+    },
+    "result_blindness": "all bounds are frozen before any M0/M11-C evaluation result is read"
+  },
+  "data_splits": {
+    "access_calibration": [0, 23],
+    "quality_and_mimic_fit": [24, 47],
+    "frozen_pilot_evaluation": [48, 95]
+  },
+  "primary_endpoint": {
+    "name": "Gamma_cross",
+    "formula": "min(N_JV_to_O, N_JO_to_V)",
+    "N_JV_to_O": "minimum energy distance across preregistered cells between O under do(J_V=a) and do(J_V=0)",
+    "N_JO_to_V": "minimum energy distance across preregistered cells between V under do(J_O=a) and do(J_O=0)",
+    "distance": "normalized energy distance on fixed post-intervention trajectory signatures",
+    "positive_threshold": 0.05,
+    "negative_upper_bound": 0.02
+  },
+  "identifiability_endpoint": {
+    "name": "Delta_ID_M11_C",
+    "definition": "holdout interventional distribution distance between M0 and the best pre-fitted full constrained M11-C",
+    "equivalence_tolerance": 0.02,
+    "structural_rule": "within tolerance is NON_IDENTIFIABLE_UNDER_A1; do not rescue with classifier changes"
+  },
+  "pilot": {
+    "n_per_model": 96,
+    "confirmatory_n_per_model": 384,
+    "fresh_namespace": "PH-v0.4-Phase0A",
+    "no_legacy_seed_overlap": true,
+    "confirmatory_condition": "all mandatory Pilot gates pass"
+  },
+  "red_team": {
+    "required": [
+      "search a construction counterexample",
+      "search an unmeasured confound",
+      "search an access-model failure",
+      "test whether M11-C becomes equivalent as capacity increases",
+      "verify target randomization is independent of model identity"
+    ]
+  },
+  "decision_values": [
+    "ACCESS_CONDITIONAL_IDENTIFIABILITY_SUPPORTED",
+    "NON_IDENTIFIABLE_UNDER_A1",
+    "ACCESS_ASSUMPTION_FAIL",
+    "INCONCLUSIVE_TECHNICAL"
+  ],
+  "stop_rule": "Any mandatory quality Gate failure stops Pilot interpretation and prohibits Confirmatory."
+}

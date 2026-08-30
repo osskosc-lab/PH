@@ -1,0 +1,97 @@
+name: PH v0.4 Phase 0A Targeted Access
+
+on:
+  push:
+    branches:
+      - experiment/ph-v0.4-phase0a-targeted-access
+    paths:
+      - "experiments/v0.4-phase0a/**"
+      - ".github/workflows/ph-v04-phase0a.yml"
+  pull_request:
+    paths:
+      - "experiments/v0.4-phase0a/**"
+      - ".github/workflows/ph-v04-phase0a.yml"
+  workflow_dispatch:
+
+jobs:
+  phase0a:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install frozen runtime
+        run: python -m pip install -r experiments/v0.4-phase0a/requirements.txt
+
+      - name: Compile and validate configuration
+        run: |
+          python -m py_compile experiments/v0.4-phase0a/run_phase0a.py
+          python -m py_compile experiments/v0.4-phase0a/compare_replay.py
+          python -m json.tool experiments/v0.4-phase0a/config.json >/dev/null
+          python -m json.tool experiments/v0.4-phase0a/preregistration.json >/dev/null
+          test ! -e experiments/v0.4-phase0a/artifacts/confirmatory
+
+      - name: Run fresh Pilot
+        id: pilot
+        shell: bash
+        run: |
+          set +e
+          python experiments/v0.4-phase0a/run_phase0a.py --outdir experiments/v0.4-phase0a/artifacts/pilot
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then
+            echo "unexpected Pilot execution failure: $code"
+            exit "$code"
+          fi
+          exit 0
+
+      - name: Run independent deterministic replay
+        id: replay
+        shell: bash
+        run: |
+          set +e
+          python experiments/v0.4-phase0a/run_phase0a.py --outdir experiments/v0.4-phase0a/artifacts/replay
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then
+            echo "unexpected replay execution failure: $code"
+            exit "$code"
+          fi
+          exit 0
+
+      - name: Compare full replay artifacts
+        run: python experiments/v0.4-phase0a/compare_replay.py experiments/v0.4-phase0a/artifacts/pilot experiments/v0.4-phase0a/artifacts/replay
+
+      - name: Enforce claim and Confirmatory firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("experiments/v0.4-phase0a/artifacts/pilot")
+          result = json.loads((root / "decision.json").read_text())
+          allowed = {
+              "ACCESS_CONDITIONAL_IDENTIFIABILITY_SUPPORTED",
+              "NON_IDENTIFIABLE_UNDER_A1",
+              "ACCESS_ASSUMPTION_FAIL",
+              "INCONCLUSIVE_TECHNICAL",
+          }
+          if result["decision"] not in allowed:
+              raise SystemExit(f"invalid decision: {result['decision']}")
+          if (root / "confirmatory").exists():
+              raise SystemExit("Confirmatory data was generated during Phase 0A")
+          print(result["decision"], result["failed_gates"])
+          PY
+
+      - name: Upload Phase 0A evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ph-v0.4-phase0a-pilot
+          path: experiments/v0.4-phase0a/artifacts/pilot/
+          if-no-files-found: error
