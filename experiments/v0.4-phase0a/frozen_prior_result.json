@@ -1,0 +1,15 @@
+{
+  "source_stage": "PH v0.3.3-r1",
+  "source_report": "PH_v0.3.3_research_report_ja(1).pdf",
+  "pilot_level": "INCONCLUSIVE_TECHNICAL / STOP",
+  "structural_identity_level": "NON_IDENTIFIABLE",
+  "frozen_findings": [
+    "M0 and M11-L3 matched exactly across 96 seeds and all six primary features.",
+    "Four preregistered representations accepted M0 and M11-L3 at identical rates.",
+    "The oracle copied M0 conditional transitions, effective inputs, innovations, and output innovations into duplicated V/O states.",
+    "Fast/Slow external inputs plus V/O observations cannot identify a single shared-boundary node.",
+    "Technical state-match and SNR failures stopped the r1 Pilot; no Confirmatory or OOD was run.",
+    "This does not deny shared causal influence, common causes, PH in nature, or all possible mimic classes."
+  ],
+  "v0_4_policy": "Only genuinely new local-intervention access may challenge the frozen result; classifier repair on A0 data is prohibited."
+}

@@ -1,0 +1,105 @@
+{
+  "version": "PH-v0.4-Phase0A",
+  "title": "Targeted-Access Identifiability Falsification",
+  "research_mode": "falsification_first",
+  "pilot_n_per_model": 96,
+  "confirmatory_n_per_model": 384,
+  "splits": {
+    "access_selectivity_calibration": [0, 23],
+    "quality_and_mimic_fit": [24, 47],
+    "frozen_pilot_evaluation": [48, 95]
+  },
+  "models": [
+    "M0",
+    "M11-C",
+    "M11-U",
+    "M10",
+    "M1",
+    "M2",
+    "M_CD",
+    "M_NULL"
+  ],
+  "access": {
+    "A0": ["fast_external", "slow_external", "observe_V", "observe_O"],
+    "A1_additions": ["J_V", "J_O"],
+    "profiles": ["impulse", "finite_pulse", "PRBS", "multisine"],
+    "amplitudes": [0.5, 1.0],
+    "target_label_randomization": true,
+    "target_label_seed_rule": "sha256(PH-v0.4-Phase0A|target-label|index)",
+    "local_start": 48,
+    "local_window_end": 160
+  },
+  "primary_metric": {
+    "name": "energy_distance",
+    "definition": "normalized energy distance on fixed post-intervention trajectory signatures",
+    "aggregation": "minimum over all preregistered profile x amplitude cells",
+    "positive_threshold": 0.05,
+    "negative_upper_bound": 0.02,
+    "equivalence_tolerance": 0.02
+  },
+  "calibration": {
+    "direct_target_snr_min": 5.0,
+    "cross_talk_margin": 1.25,
+    "cross_talk_cap": 0.20,
+    "shared_innovation_bound": 0.25,
+    "cross_output_coupling_bound": 0.20,
+    "dynamic_range_min_std": 0.01,
+    "dynamic_range_max_abs": 4.0
+  },
+  "m11_capacity_ladder": [
+    {
+      "name": "C0_separate_no_cross",
+      "cross_talk_bound": 0.0,
+      "shared_innovation_bound": 0.0,
+      "cross_output_coupling_bound": 0.0
+    },
+    {
+      "name": "C1_measured_local_leakage",
+      "cross_talk_bound": "calibrated_c_max",
+      "shared_innovation_bound": 0.0,
+      "cross_output_coupling_bound": 0.0
+    },
+    {
+      "name": "C2_plus_shared_innovation",
+      "cross_talk_bound": "calibrated_c_max",
+      "shared_innovation_bound": "registered_rho_max",
+      "cross_output_coupling_bound": 0.0
+    },
+    {
+      "name": "C3_full_constrained_M11-C",
+      "cross_talk_bound": "calibrated_c_max",
+      "shared_innovation_bound": "registered_rho_max",
+      "cross_output_coupling_bound": "registered_kappa_max"
+    }
+  ],
+  "gates": {
+    "G1_selectivity_c_max": "all calibration upper cross-talk bounds <= c_max",
+    "G2_quality": "target-side SNR and dynamic range pass",
+    "G3_M0_bidirectional": "both M0 cross directions >= positive_threshold",
+    "G4_basic_negative": "M1, M2, M_NULL cross directions <= negative_upper_bound",
+    "G5_legacy_mimic": "M10 cross directions <= negative_upper_bound",
+    "G6_common_driver": "M_CD cross directions <= negative_upper_bound",
+    "G7_constrained_separation": "Delta_ID_M11_C > equivalence_tolerance",
+    "G8_profile_amplitude_robustness": "M0 and M11-C separation hold in every cell",
+    "G9_capacity_ladder": "full constrained ladder evaluated with nested bounds",
+    "G10_unrestricted_oracle_firewall": "M11-U equivalence is a canary and cannot support global identification",
+    "G11_replay_integrity": "finite, unique fresh seeds, and deterministic replay"
+  },
+  "stopping": {
+    "pilot_gate_failure": "STOP",
+    "confirmatory_requires": "all mandatory Pilot gates G0-G9 and G11 PASS",
+    "structural_counterexample": "M11-C equivalence within tolerance => NON_IDENTIFIABLE_UNDER_A1"
+  },
+  "seed_namespace": "PH-v0.4-Phase0A",
+  "legacy_namespaces": [
+    "PH-v0.2",
+    "PH-v0.2.1",
+    "PH-v0.3",
+    "PH-v0.3.1",
+    "PH-v0.3.2",
+    "PH-v0.3.2-r1",
+    "PH-v0.3.3",
+    "PH-v0.3.3-r1"
+  ],
+  "confirmatory_generation": "forbidden unless every mandatory Pilot gate passes"
+}
