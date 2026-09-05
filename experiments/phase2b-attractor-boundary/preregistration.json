@@ -1,0 +1,170 @@
+{
+  "title": "ATCT-PH Phase 2B v0.1 — Attractor Flattening and Operational Boundary Degeneracy",
+  "version": "0.1",
+  "language": "Japanese",
+  "research_mode": "falsification_first",
+  "protocol_status": "DRAFT_FOR_PREREGISTRATION_FREEZE",
+  "execution_status": {
+    "pilot_execution": "NOT_AUTHORIZED",
+    "confirmatory_execution": "NOT_AUTHORIZED",
+    "current_gate": "P2B-P0_SPECIFICATION_FREEZE",
+    "next_gate_if_pass": "P2B-P1_IMPLEMENTATION_QUALIFICATION"
+  },
+  "scope": {
+    "scientific_target": "自己復帰強度の低下に伴う operational causal boundary distinguishability の縮退",
+    "excluded_targets": [
+      "ego death",
+      "consciousness onset",
+      "selfhood identity",
+      "qualia location or transfer",
+      "soul existence, persistence, death, or transfer",
+      "latent boundary identity"
+    ],
+    "claim_ceiling": "synthetic, access-relative, operational boundary-degeneracy claim only"
+  },
+  "model": {
+    "equation": "x_{t+1} = F(x_t) + kappa * R(x_t, K) + eta_t",
+    "kappa_range": [0.0, 1.0],
+    "kappa_grid": [1.0, 0.75, 0.5, 0.25, 0.0],
+    "eta": "zero-mean Gaussian process noise with covariance frozen before Pilot",
+    "delta_T_role": "analysis-window hyperparameter only; never treated as a physical state variable"
+  },
+  "access_class": {
+    "A_P2B": "predefined observations Y plus matched internal/external intervention families",
+    "I_in": "interventions on preregistered inside-target channels",
+    "I_out": "amplitude/profile-matched interventions on preregistered outside-target channels",
+    "matching_rule": "same profile, amplitude, duration, observation window, and paired noise namespace",
+    "target_label_randomization": "inside/outside slot labels are permuted per seed before simulation and hidden from estimators"
+  },
+  "primary_endpoint": {
+    "name": "D_boundary(kappa)",
+    "interpretation": "operational boundary distinguishability under A_P2B; not latent-boundary identity",
+    "trajectory_signature": "fixed post-intervention multivariate trajectory segment after baseline subtraction and preregistered scale normalization",
+    "cell_distance": "normalized energy distance",
+    "normalization": "ED_norm = ED / (ED + S_pool), where S_pool is the preregistered pooled within-cell pairwise-distance scale",
+    "aggregation": "median ED_norm across matched intervention cells",
+    "formula": "D_boundary(kappa) = median_{c in C} ED_norm(P_in^c(Y|kappa), P_out^c(Y|kappa))",
+    "range": "[0,1)"
+  },
+  "primary_hypothesis": {
+    "id": "H1_TREND",
+    "statement": "For decreasing kappa, D_boundary does not increase beyond tolerance and shows a non-trivial endpoint reduction.",
+    "ordered_grid": "kappa_1 > kappa_2 > ... > kappa_m",
+    "monotonicity_gate": "max_j [D_boundary(kappa_{j+1}) - D_boundary(kappa_j)] <= delta_D",
+    "delta_D": 0.02,
+    "endpoint_effect": "Delta_D = D_boundary(1.0) - D_boundary(0.0)",
+    "minimum_endpoint_drop": 0.10,
+    "pass_rule": "monotonicity_gate PASS AND Delta_D >= 0.10",
+    "failure_rule": "any certified flattening condition with monotonicity violation > 0.02, or Delta_D < 0.10"
+  },
+  "secondary_extinction_endpoint": {
+    "id": "H_EXTINCTION",
+    "statement": "Operational extinction is separate from trend support.",
+    "epsilon_B": 0.05,
+    "criterion": "D_boundary(kappa_min) <= epsilon_B with preregistered uncertainty upper bound <= epsilon_B",
+    "firewall": "extinction under A_P2B does not imply absolute disappearance of causal influence outside A_P2B"
+  },
+  "independent_flattening_certificate": {
+    "name": "F_flat(kappa)",
+    "role": "manipulation check independent of D_boundary",
+    "primary_definition": "median local restoring curvature of the effective return potential over a preregistered neighborhood of K",
+    "formula": "F_flat(kappa) = median_{x in N(K)} lambda_min(Hessian[U_0(x) + kappa U_K(x)])",
+    "empirical_crosscheck": "median return probability and median tau_return after matched off-K perturbations",
+    "required_direction": "F_flat must decrease as kappa decreases",
+    "minimum_flattening_gate": "F_flat(0.0) <= 0.50 * F_flat(1.0)",
+    "failure_semantics": "if this gate fails, no inference about boundary degeneration is allowed"
+  },
+  "counterworld_falsification": {
+    "id": "CW1",
+    "purpose": "test whether flattening can occur without operational boundary degeneration within the preregistered admissible generator family",
+    "required_condition": "flattening certificate passes",
+    "falsification_pattern": "F_flat decreases but D_boundary is preserved within tolerance",
+    "formal_rule": "if F_flat(0.0) <= 0.50*F_flat(1.0) AND D_boundary(0.0) >= D_boundary(1.0)-0.02, then H1_TREND is FALSIFIED for the registered claim scope",
+    "anti_rescue_rule": "do not retune estimator, intervention family, normalization, or thresholds after a valid CW1 hit"
+  },
+  "fisher_diagnostic": {
+    "status": "DIAGNOSTIC_ONLY",
+    "definition": "g_kappa(theta) = E[(grad_theta log p_kappa(Y|do(I);theta))(grad_theta log p_kappa(Y|do(I);theta))^T]",
+    "theta": "frozen observation-model parameter vector specified before implementation qualification",
+    "expectation": "over the preregistered intervention distribution and observation model",
+    "reported_quantities": [
+      "lambda_min(g_kappa)",
+      "effective_rank_epsilon(g_kappa)",
+      "eigenvalue_spectrum"
+    ],
+    "forbidden_inference": "Fisher singularity or rank loss must not be interpreted as ego dissolution, consciousness loss, or soul dissolution"
+  },
+  "window_susceptibility": {
+    "B_eff": "operational boundary-size or boundary-score summary defined by the implementation contract",
+    "chi_B": "chi_B(DeltaT; kappa) = |partial B_eff(DeltaT,kappa) / partial log(DeltaT)|",
+    "chi_kappa": "chi_kappa(DeltaT,kappa) = |partial B_eff(DeltaT,kappa) / partial kappa|",
+    "role": "secondary exploratory surface only",
+    "firewall": "peaks are critical-window candidates, not physical phase transitions"
+  },
+  "uncertainty_and_statistics": {
+    "unit_of_independence": "seed",
+    "paired_design": "matched in/out interventions share seed-specific nuisance draws",
+    "primary_uncertainty": "seed bootstrap confidence interval with algorithm frozen before Pilot",
+    "multiple_testing": "not applicable to the single primary H1 gate; all diagnostics are explicitly secondary"
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "name": "SPEC_FREEZE",
+      "pass": "all formulas, kappa grid, access class, estimator, thresholds, seed namespaces, and counterworld rules are immutable before Pilot"
+    },
+    {
+      "id": "G1",
+      "name": "DYNAMIC_RANGE",
+      "pass": "interventions produce estimable non-saturated responses across the registered kappa grid"
+    },
+    {
+      "id": "G2",
+      "name": "INTERVENTION_MATCHING",
+      "pass": "I_in and I_out satisfy frozen amplitude/profile/energy matching tolerances"
+    },
+    {
+      "id": "G3",
+      "name": "FLATTENING_CERTIFICATE",
+      "pass": "F_flat(0.0) <= 0.50 * F_flat(1.0)"
+    },
+    {
+      "id": "G4",
+      "name": "NULL_CALIBRATION",
+      "pass": "a no-boundary-difference null does not produce a spurious D_boundary trend beyond delta_D"
+    },
+    {
+      "id": "G5",
+      "name": "COUNTERWORLD",
+      "pass_or_stop": "a valid CW1 hit falsifies H1 and stops support claims; failure to construct CW1 is not evidence of universality"
+    },
+    {
+      "id": "G6",
+      "name": "PRIMARY_H1",
+      "pass": "monotonicity tolerance <= 0.02 and endpoint drop >= 0.10"
+    },
+    {
+      "id": "G7",
+      "name": "ORACLE_CLONE_FIREWALL",
+      "pass": "an access-equivalent latent implementation remains explicitly non-identifiable; boundary-degeneration detection must not be upgraded to latent-mechanism identity"
+    }
+  ],
+  "decision_values": [
+    "SUPPORTED_WITHIN_REGISTERED_SYNTHETIC_ACCESS_CLASS",
+    "FALSIFIED_BY_COUNTERWORLD",
+    "NOT_SUPPORTED_TREND",
+    "FLATTENING_MANIPULATION_FAIL",
+    "ACCESS_OR_ESTIMATOR_QUALIFICATION_FAIL",
+    "INCONCLUSIVE_TECHNICAL"
+  ],
+  "claim_firewall": [
+    "D_boundary > 0 != latent boundary identified",
+    "D_boundary -> 0 != absolute causal disappearance",
+    "F_flat -> 0 != ego death",
+    "DeltaT is an analysis parameter, not a death-state variable",
+    "Fisher rank loss != phenomenology",
+    "synthetic success != biological or neural validity",
+    "boundary degeneration detected != latent boundary mechanism identified"
+  ],
+  "next_step_after_freeze": "implement only the narrow Pilot/qualification layer; do not generate Confirmatory data until every mandatory qualification gate passes and a separate confirmatory freeze is created"
+}
