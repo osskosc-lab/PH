@@ -1,0 +1,702 @@
+{
+  "contract_id": "ATCT-PH-P2B-v0.1-IMPLEMENTATION-CONTRACT",
+  "contract_version": "1.0",
+  "status": "FROZEN_FOR_CODE_INSTANTIATION_ONLY",
+  "scientific_execution": "PROHIBITED",
+  "numeric_contract": {
+    "scalar_type": "IEEE-754 binary64",
+    "state_dimension": 4,
+    "state_order": [
+      "c1",
+      "c2",
+      "e1",
+      "e2"
+    ],
+    "tolerance_for_deterministic_replay": 1e-12,
+    "no_float32": true
+  },
+  "dynamics": {
+    "exact_update": "x_{t+1} = A_kappa x_t + b_j u_t + eta_t",
+    "decomposition": "F(x)=A_0 x; R(x,K)=-h Q_K x; A_kappa=I+h(-Q_0+Omega-kappa Q_K)",
+    "h": 0.25,
+    "Q_0": [
+      [
+        0.2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0.2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0.35,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0.35
+      ]
+    ],
+    "Omega": [
+      [
+        0,
+        -0.2,
+        0.06,
+        0
+      ],
+      [
+        0.2,
+        0,
+        0,
+        0.06
+      ],
+      [
+        0.04,
+        0,
+        0,
+        -0.12
+      ],
+      [
+        0,
+        0.04,
+        0.12,
+        0
+      ]
+    ],
+    "Q_K": [
+      [
+        0.8,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0.8,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "kappa_grid": [
+      1,
+      0.75,
+      0.5,
+      0.25,
+      0
+    ],
+    "initial_state": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "K": {
+      "definition": "K = {x in R^4 : c1=0 and c2=0}",
+      "projector_P_in": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "distance": "d_K(x)=sqrt(c1^2+c2^2)"
+    },
+    "process_noise": {
+      "distribution": "eta_t ~ N(0, sigma_process^2 I_4)",
+      "sigma_process": 0.04,
+      "generation": "SHA256 counter-mode uniforms followed by the frozen Box-Muller transform in rng_contract"
+    },
+    "restoring_potential": {
+      "U_0_internal": "0.5 * [c1,c2] diag(0.20,0.20) [c1,c2]^T",
+      "U_K": "0.5 * [c1,c2] diag(0.80,0.80) [c1,c2]^T",
+      "F_flat_formula": "F_flat(kappa)=lambda_min(diag(0.20,0.20)+kappa*diag(0.80,0.80))=0.20+0.80*kappa",
+      "frozen_values": {
+        "1.0": 1,
+        "0.75": 0.8,
+        "0.5": 0.6,
+        "0.25": 0.4,
+        "0.0": 0.2
+      },
+      "interpretation": "registered conservative restoring curvature only; not the full dynamical Jacobian"
+    }
+  },
+  "time_indexing": {
+    "update_times": "t=0..383",
+    "observation_times": "t=0..384",
+    "burn_in_updates": "t=0..255, u_t=0",
+    "pre_baseline_observations": "y_192..y_255 inclusive (64 samples)",
+    "intervention_onset_update": "t0=256",
+    "post_signature_observations": "y_257..y_384 inclusive (128 samples)",
+    "total_updates": 384,
+    "total_observations": 385
+  },
+  "observation_model": {
+    "formula": "y_t = C(theta) x_t + xi_t",
+    "y_dimension": 2,
+    "C_nominal": [
+      [
+        1,
+        0,
+        0.25,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0.25
+      ]
+    ],
+    "sigma_obs": 0.03,
+    "noise": "xi_t ~ N(0, sigma_obs^2 I_2)",
+    "theta": {
+      "parameter_vector": [
+        "theta_1=c13",
+        "theta_2=c24",
+        "theta_3=log(sigma_obs)"
+      ],
+      "nominal": [
+        0.25,
+        0.25,
+        -3.506557897319982
+      ],
+      "fixed_C_entries": "all C entries other than c13 and c24 are fixed exactly as C_nominal",
+      "fisher_likelihood": "conditional Gaussian p(y_t | x_t, theta)",
+      "fisher_expectation": "uniform over 16 intervention cells, registered post-signature times, and the registered seed distribution at each kappa",
+      "effective_rank_epsilon": "1e-6 * lambda_max(g_kappa)"
+    }
+  },
+  "intervention_contract": {
+    "injection_rule": "u_t = amplitude * p(t-256); x_{t+1} receives target_vector * u_t",
+    "target_pairs": [
+      {
+        "pair_id": "P1",
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "pair_id": "P2",
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "profiles": {
+      "impulse": "p(n)=1 if n=0 else 0",
+      "pulse8": "p(n)=1 for 0<=n<8 else 0",
+      "sine16x4": "p(n)=sin(2*pi*n/16) for 0<=n<64 else 0",
+      "biphasic16": "p(n)=+1 for 0<=n<8; -1 for 8<=n<16; 0 otherwise"
+    },
+    "amplitudes": [
+      0.25,
+      0.5
+    ],
+    "matched_cells": [
+      {
+        "cell_id": "P1-impulse-a0.25",
+        "pair_id": "P1",
+        "profile": "impulse",
+        "amplitude": 0.25,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-impulse-a0.50",
+        "pair_id": "P1",
+        "profile": "impulse",
+        "amplitude": 0.5,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-pulse8-a0.25",
+        "pair_id": "P1",
+        "profile": "pulse8",
+        "amplitude": 0.25,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-pulse8-a0.50",
+        "pair_id": "P1",
+        "profile": "pulse8",
+        "amplitude": 0.5,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-sine16x4-a0.25",
+        "pair_id": "P1",
+        "profile": "sine16x4",
+        "amplitude": 0.25,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-sine16x4-a0.50",
+        "pair_id": "P1",
+        "profile": "sine16x4",
+        "amplitude": 0.5,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-biphasic16-a0.25",
+        "pair_id": "P1",
+        "profile": "biphasic16",
+        "amplitude": 0.25,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P1-biphasic16-a0.50",
+        "pair_id": "P1",
+        "profile": "biphasic16",
+        "amplitude": 0.5,
+        "in_target": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "cell_id": "P2-impulse-a0.25",
+        "pair_id": "P2",
+        "profile": "impulse",
+        "amplitude": 0.25,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-impulse-a0.50",
+        "pair_id": "P2",
+        "profile": "impulse",
+        "amplitude": 0.5,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-pulse8-a0.25",
+        "pair_id": "P2",
+        "profile": "pulse8",
+        "amplitude": 0.25,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-pulse8-a0.50",
+        "pair_id": "P2",
+        "profile": "pulse8",
+        "amplitude": 0.5,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-sine16x4-a0.25",
+        "pair_id": "P2",
+        "profile": "sine16x4",
+        "amplitude": 0.25,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-sine16x4-a0.50",
+        "pair_id": "P2",
+        "profile": "sine16x4",
+        "amplitude": 0.5,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-biphasic16-a0.25",
+        "pair_id": "P2",
+        "profile": "biphasic16",
+        "amplitude": 0.25,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "cell_id": "P2-biphasic16-a0.50",
+        "pair_id": "P2",
+        "profile": "biphasic16",
+        "amplitude": 0.5,
+        "in_target": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "out_target": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "number_of_matched_cells": 16,
+    "matching_requirement": "within each cell, in/out share the same amplitude, profile, onset, duration, process-noise path, observation-noise path, and analysis window",
+    "numeric_matching_tolerance": 1e-12,
+    "pair_label_randomization": "for each seed, a deterministic hash bit may swap P1<->P2 jointly for in/out artifact labels only; inside/outside class is never swapped and physical target vectors are not changed"
+  },
+  "trajectory_signature": {
+    "baseline": "bar_y_pre = mean(y_192..y_255, axis=time)",
+    "signature": "z = vec(y_257..y_384 - bar_y_pre) / sqrt(256)",
+    "vectorization_order": "time-major, within-time channel order [y1,y2]",
+    "dimension": 256,
+    "no_data_dependent_feature_selection": true,
+    "no_learned_standardization": true
+  },
+  "primary_distance": {
+    "base_metric": "Euclidean norm on 256D signatures",
+    "energy_distance_v_statistic": "ED(X,Y)=2/(nm) sum_ij ||Xi-Yj|| - 1/n^2 sum_ij ||Xi-Xj|| - 1/m^2 sum_ij ||Yi-Yj||",
+    "pooled_scale": "S_pool = 1/(n+m)^2 * sum_ab ||Za-Zb|| over pooled Z=[X;Y], including zero diagonals",
+    "normalized": "ED_norm = max(ED,0) / (max(ED,0) + S_pool + 1e-12)",
+    "cell_aggregation": "D_boundary(kappa)=median of the 16 ED_norm cell values",
+    "median_even_rule": "arithmetic mean of the 8th and 9th sorted values"
+  },
+  "dynamic_range_gate": {
+    "response_rms": "for each seed/cell/side/kappa, RMS of paired do-minus-sham post-signature in observation space",
+    "lower_bound": 0.01,
+    "upper_bound": 2,
+    "pass": "at least 95% of seed-level responses in every registered cell/side/kappa lie within [0.01,2.0], and all values are finite"
+  },
+  "flattening_empirical_crosscheck": {
+    "perturbations": [
+      [
+        0.5,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0.5,
+        0,
+        0
+      ]
+    ],
+    "no_intervention": true,
+    "return_threshold": "d_K(x)<=0.10",
+    "horizon_updates": 128,
+    "tau_return": "first t>=1 satisfying return_threshold; right-censor at 129 if absent",
+    "role": "secondary manipulation crosscheck; analytic F_flat is the primary flattening certificate"
+  },
+  "null_controls": {
+    "exact_null": {
+      "name": "M_NULL_IDENTICAL_ACTUATION",
+      "rule": "for each matched pair replace both in_target and out_target by (in_target+out_target)/sqrt(2), while preserving the in/out labels and using matched nuisance streams",
+      "expected": "paired signatures are identical up to deterministic floating-point tolerance; ED_norm <= 1e-12 at every kappa/cell"
+    },
+    "paired_label_swap_null": {
+      "repeats": 512,
+      "rule": "within each seed and cell independently swap the in/out signature labels according to a deterministic SHA256 bit; preserve group sizes by paired swapping",
+      "statistic": "V_null=max_j[D_null(kappa_{j+1})-D_null(kappa_j)]",
+      "gate": "nearest-rank q95(V_null)<=0.02"
+    }
+  },
+  "counterworld_control": {
+    "name": "CW1_DECOUPLED_REPORTER",
+    "purpose": "negative-control DGP showing that registered restoring flattening need not mechanically force the estimator to report boundary degeneration",
+    "base_state": "same 4D x dynamics, same F/R/K, same kappa grid and same x-process noise",
+    "reporter_state": "r in R^2; r_{t+1}=0.65*r_t + 0.30*s_t + nu_t, nu_t~N(0,0.02^2 I_2)",
+    "reporter_drive": "for P1, s_t=[+u_t,0] for inside and [-u_t,0] for outside; for P2, s_t=[0,+u_t] for inside and [0,-u_t] for outside",
+    "counterworld_observation": "y_CW = C(theta)x + 0.60*r + xi",
+    "expected_semantics": "F_flat still follows 0.20+0.80*kappa, while a kappa-independent reporter may preserve D_boundary",
+    "decision_semantics": "CW1 is a falsifier of any universal 'flattening implies boundary degeneration' generalization and a pipeline negative control; it does not by itself decide the base-DGP H1_TREND",
+    "anti_rescue": "if the pipeline forces a strong decreasing trend in CW1, implementation/estimator qualification fails; do not retune after inspection"
+  },
+  "oracle_clone": {
+    "name": "M_ORACLE_DUPLICATED_LATENT",
+    "latent_dimension": 8,
+    "construction": "z=(x_a,x_b), x_a(0)=x_b(0)=x_0; both copies receive the same A_kappa, same intervention, and exactly the same eta_t; y=C(theta)*(x_a+x_b)/2+xi",
+    "equivalence": "x_a=x_b for every t, so allowed outputs are exactly access-equivalent to the 4D base model up to replay tolerance",
+    "firewall": "different latent implementation dimension cannot be upgraded to a uniquely identified latent boundary mechanism"
+  },
+  "window_surface": {
+    "DeltaT_grid": [
+      8,
+      16,
+      32,
+      64,
+      128
+    ],
+    "B_eff": "recompute D_boundary using only the first DeltaT post-intervention observations, with the same baseline and signature normalization sqrt(2*DeltaT)",
+    "chi_B": "absolute finite difference with respect to log(DeltaT); centered for interior grid points and one-sided at endpoints",
+    "chi_kappa": "absolute finite difference with respect to kappa; centered for interior kappa points and one-sided at endpoints",
+    "role": "secondary exploratory only"
+  },
+  "seed_namespace": {
+    "master_namespace": "ATCT-PH-P2B-v0.1",
+    "qualification": {
+      "stage": "QUAL",
+      "n": 96,
+      "indices": [
+        0,
+        95
+      ]
+    },
+    "confirmatory_reserved": {
+      "stage": "CONF",
+      "n": 384,
+      "indices": [
+        0,
+        383
+      ],
+      "generation": "PROHIBITED_UNTIL_SEPARATE_CONFIRMATORY_FREEZE"
+    },
+    "master_seed_derivation": "seed(stage,i)=int.from_bytes(SHA256(UTF8(master_namespace+'|'+stage+'|'+decimal(i))).digest()[0:8], 'big') & 0x7fffffffffffffff",
+    "substream_key": "UTF8(master_namespace+'|'+stage+'|'+i+'|k='+kappa_index+'|cell='+cell_id+'|stream='+stream_name)",
+    "matched_noise_rule": "stream_name PROCESS and OBS exclude in/out side, so the matched in/out cell uses the same nuisance path",
+    "distinct_streams": [
+      "PROCESS",
+      "OBS",
+      "REPORTER",
+      "PAIRPERM"
+    ],
+    "no_legacy_overlap_semantics": "namespace is disjoint by construction from prior PH namespaces"
+  },
+  "rng_contract": {
+    "hash": "SHA-256",
+    "uniform64": "for counter q>=0, d=SHA256(key || UTF8('|q='+q)); U=(int.from_bytes(d[0:8],'big')+0.5)/2^64",
+    "gaussian": "consume uniforms in ordered pairs (U1,U2); Z0=sqrt(-2 ln U1) cos(2*pi U2), Z1=sqrt(-2 ln U1) sin(2*pi U2); consume Z0 then Z1",
+    "uniform_integer_for_bootstrap": "use 64-bit hash words with rejection above floor(2^64/N)*N; accepted value mod N",
+    "prohibition": "no library RNG may replace this stream in qualification or confirmatory execution"
+  },
+  "bootstrap_contract": {
+    "unit": "seed",
+    "paired_resampling": "one resampled seed index simultaneously selects all kappa/cells/sides for that bootstrap draw",
+    "repeats": 10000,
+    "namespace": "ATCT-PH-P2B-v0.1|BOOT",
+    "statistics": {
+      "V_mon": "max_j[D(kappa_{j+1})-D(kappa_j)] in descending kappa order",
+      "Delta_D": "D(1.0)-D(0.0)",
+      "D_min": "D(0.0)"
+    },
+    "quantile_rule": "nearest-rank empirical quantile: sort B values ascending; q_p=value at 1-based index ceil(p*B)",
+    "primary_gate": "U95(V_mon)<=0.02 AND L95(Delta_D)>=0.10",
+    "extinction_gate": "U95(D_min)<=0.05",
+    "no_BCa": true,
+    "no_studentized_bootstrap": true,
+    "no_seed_level_pseudoreplication": true
+  },
+  "stage_lock": {
+    "current_stage": "P2B-P1_IMPLEMENTATION_QUALIFICATION",
+    "allowed_now": [
+      "write simulator and estimator code exactly from this contract",
+      "write deterministic unit tests",
+      "write replay/hash validation"
+    ],
+    "prohibited_now": [
+      "run stochastic QUAL simulation",
+      "generate CONF seeds or data",
+      "change thresholds after seeing any Phase 2B outcome",
+      "phenomenology or metaphysical claim"
+    ]
+  }
+}
