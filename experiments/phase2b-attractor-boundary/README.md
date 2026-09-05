@@ -2,39 +2,43 @@
 
 ## Attractor Flattening and Operational Boundary Degeneracy
 
-This directory is the **preregistration-only** scaffold for Phase 2B.
+Phase 2B is now at **P2B-P1_IMPLEMENTATION_QUALIFICATION**.
 
-The scientific question is deliberately narrower than any phenomenological or metaphysical interpretation:
+The P0 specification freeze is complete. The scientific question remains deliberately narrow:
 
-> When a preregistered restoring organization is weakened by lowering `kappa`, does the **operational causal boundary distinguishability** measured under a fixed access class decrease?
+> In the single frozen synthetic base DGP, when the registered restoring organization is weakened by lowering `kappa`, does the access-relative operational causal boundary distinguishability `D_boundary(kappa)` decrease?
 
-The core model is:
+The exact implementation contract is:
+
+- `implementation_contract.json` — F/R/K, observation model, theta, intervention cells, time indexing, estimator, controls, seed/RNG namespace, and bootstrap.
+- `preregistration.json` — claim scope, primary/secondary endpoints, decision gates, and firewall.
+- `P0_FREEZE_AUDIT.md` — zero-degree-of-freedom audit for the frozen scientific specification.
+- `CLAIM_FIREWALL.md` — prohibited claim upgrades.
+
+## Frozen core
 
 ```
-x_(t+1) = F(x_t) + kappa R(x_t, K) + eta_t
+x_(t+1) = A_kappa x_t + b_j u_t + eta_t
+A_kappa = I + 0.25(-Q_0 + Omega - kappa Q_K)
+K = {x : c1 = 0, c2 = 0}
+F_flat(kappa) = 0.20 + 0.80*kappa
 ```
 
-`kappa` is the physical/simulation control parameter. `DeltaT` remains an analysis-window hyperparameter and is never reinterpreted as a physical death variable.
+`DeltaT` remains an analysis-window hyperparameter only.
 
-The primary endpoint is `D_boundary(kappa)`, defined from matched internal-vs-external intervention response distributions with a frozen normalized energy-distance estimator. It is an **access-relative operational quantity** only.
+The primary endpoint is a frozen normalized energy-distance statistic over exactly 16 matched inside/outside intervention cells. The primary inferential gate uses a paired seed bootstrap with B=10,000 and frozen nearest-rank quantiles.
 
-Five preregistration corrections are fixed here:
+## Current authorization
 
-1. `D_boundary` is fully operationalized and does not claim latent-boundary identity.
-2. Monotone degeneration and operational extinction are separate claims.
-3. Flattening is independently certified by `F_flat` before interpreting `D_boundary`.
-4. Fisher information is diagnostic only and its parameterization must be frozen.
-5. Window susceptibility is written as `chi_B(DeltaT; kappa)`; `chi_kappa` is a separate control sensitivity.
+```
+P2B-P0_SPECIFICATION_FREEZE: PASS
+CURRENT_GATE: P2B-P1_IMPLEMENTATION_QUALIFICATION
 
-A registered counterworld is allowed to kill the hypothesis. If certified flattening occurs while `D_boundary` remains preserved within tolerance, the registered H1 is falsified. No estimator or threshold rescue is allowed after such a hit.
+IMPLEMENTATION_SCAFFOLD: AUTHORIZED
+STOCHASTIC_QUALIFICATION_RUN: NOT AUTHORIZED
+CONFIRMATORY_RUN: NOT AUTHORIZED
+```
 
-## Current status
+P1 may translate the contract into simulator/estimator code, deterministic unit tests, and replay/hash checks only. It may not tune any scientific parameter and may not run the stochastic QUAL or CONF stages yet.
 
-- protocol: **DRAFT_FOR_PREREGISTRATION_FREEZE**
-- Pilot execution: **NOT AUTHORIZED**
-- Confirmatory execution: **NOT AUTHORIZED**
-- current gate: **P2B-P0_SPECIFICATION_FREEZE**
-
-No result in this directory may be used to claim ego death, consciousness loss, qualia change, soul persistence, soul death, biological validity, or latent boundary identity.
-
-The next valid step is an implementation-qualification PR that exactly instantiates the frozen access class, model contract, primary endpoint, flattening certificate, null, counterworld, and Oracle-Clone firewall. Confirmatory data generation requires a later explicit freeze.
+No result from this branch may be used to claim ego death, consciousness loss, selfhood identity, qualia change, soul persistence/death/transfer, biological validity, or unique latent boundary identity.
