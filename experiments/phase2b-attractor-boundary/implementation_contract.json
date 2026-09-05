@@ -542,7 +542,7 @@
     "number_of_matched_cells": 16,
     "matching_requirement": "within each cell, in/out share the same amplitude, profile, onset, duration, process-noise path, observation-noise path, and analysis window",
     "numeric_matching_tolerance": 1e-12,
-    "pair_label_randomization": "for each seed, a deterministic hash bit may swap P1<->P2 jointly for in/out artifact labels only; inside/outside class is never swapped and physical target vectors are not changed"
+    "pair_label_randomization": "disabled for physical execution and statistical aggregation; P1/P2 must use the frozen cell_id order exactly as listed"
   },
   "trajectory_signature": {
     "baseline": "bar_y_pre = mean(y_192..y_255, axis=time)",
@@ -564,7 +564,8 @@
     "response_rms": "for each seed/cell/side/kappa, RMS of paired do-minus-sham post-signature in observation space",
     "lower_bound": 0.01,
     "upper_bound": 2,
-    "pass": "at least 95% of seed-level responses in every registered cell/side/kappa lie within [0.01,2.0], and all values are finite"
+    "pass": "at least 95% of seed-level responses in every registered cell/side/kappa lie within [0.01,2.0], and all values are finite",
+    "sham": "for every seed/cell/side/kappa, rerun the identical nuisance streams with u_t=0 for all t; response_rms=sqrt(mean_{t=257..384,channels}((y_do-y_sham)^2))"
   },
   "flattening_empirical_crosscheck": {
     "perturbations": [
@@ -597,7 +598,8 @@
       "repeats": 512,
       "rule": "within each seed and cell independently swap the in/out signature labels according to a deterministic SHA256 bit; preserve group sizes by paired swapping",
       "statistic": "V_null=max_j[D_null(kappa_{j+1})-D_null(kappa_j)]",
-      "gate": "nearest-rank q95(V_null)<=0.02"
+      "gate": "nearest-rank q_0.95(V_null)<=0.02, where each repeat uses the frozen NULLSWAP bit_key and D_null is recomputed across all 16 cells",
+      "bit_key": "bit(seed_i,cell_id,repeat_r)=least-significant bit of SHA256(UTF8('ATCT-PH-P2B-v0.1|NULLSWAP|seed='+i+'|cell='+cell_id+'|rep='+r))[0]; bit=1 swaps that seed's paired in/out signatures"
     }
   },
   "counterworld_control": {
@@ -609,7 +611,8 @@
     "counterworld_observation": "y_CW = C(theta)x + 0.60*r + xi",
     "expected_semantics": "F_flat still follows 0.20+0.80*kappa, while a kappa-independent reporter may preserve D_boundary",
     "decision_semantics": "CW1 is a falsifier of any universal 'flattening implies boundary degeneration' generalization and a pipeline negative control; it does not by itself decide the base-DGP H1_TREND",
-    "anti_rescue": "if the pipeline forces a strong decreasing trend in CW1, implementation/estimator qualification fails; do not retune after inspection"
+    "anti_rescue": "if the pipeline forces a strong decreasing trend in CW1, implementation/estimator qualification fails; do not retune after inspection",
+    "qualification_gate": "pipeline-negative-control PASS iff analytic flattening certificate holds and bootstrap L95(Delta_D_CW)<=0.02; if L95(Delta_D_CW)>0.02, ACCESS_OR_ESTIMATOR_QUALIFICATION_FAIL"
   },
   "oracle_clone": {
     "name": "M_ORACLE_DUPLICATED_LATENT",
@@ -651,7 +654,7 @@
       "generation": "PROHIBITED_UNTIL_SEPARATE_CONFIRMATORY_FREEZE"
     },
     "master_seed_derivation": "seed(stage,i)=int.from_bytes(SHA256(UTF8(master_namespace+'|'+stage+'|'+decimal(i))).digest()[0:8], 'big') & 0x7fffffffffffffff",
-    "substream_key": "UTF8(master_namespace+'|'+stage+'|'+i+'|k='+kappa_index+'|cell='+cell_id+'|stream='+stream_name)",
+    "substream_key": "UTF8(master_namespace+'|'+stage+'|seed_index='+i+'|kappa_index='+kappa_index+'|cell='+cell_id+'|stream='+stream_name); side is intentionally omitted for PROCESS and OBS to preserve matched nuisance paths",
     "matched_noise_rule": "stream_name PROCESS and OBS exclude in/out side, so the matched in/out cell uses the same nuisance path",
     "distinct_streams": [
       "PROCESS",
@@ -665,7 +668,7 @@
     "hash": "SHA-256",
     "uniform64": "for counter q>=0, d=SHA256(key || UTF8('|q='+q)); U=(int.from_bytes(d[0:8],'big')+0.5)/2^64",
     "gaussian": "consume uniforms in ordered pairs (U1,U2); Z0=sqrt(-2 ln U1) cos(2*pi U2), Z1=sqrt(-2 ln U1) sin(2*pi U2); consume Z0 then Z1",
-    "uniform_integer_for_bootstrap": "use 64-bit hash words with rejection above floor(2^64/N)*N; accepted value mod N",
+    "uniform_integer_for_bootstrap": "given key and N, read successive independent 64-bit words w_j=int.from_bytes(SHA256(key||UTF8('|word='+j)).digest()[0:8],'big'); let L=floor(2^64/N)*N; reject w_j>=L; return w_j mod N",
     "prohibition": "no library RNG may replace this stream in qualification or confirmatory execution"
   },
   "bootstrap_contract": {
@@ -679,11 +682,14 @@
       "D_min": "D(0.0)"
     },
     "quantile_rule": "nearest-rank empirical quantile: sort B values ascending; q_p=value at 1-based index ceil(p*B)",
-    "primary_gate": "U95(V_mon)<=0.02 AND L95(Delta_D)>=0.10",
-    "extinction_gate": "U95(D_min)<=0.05",
+    "primary_gate": "U95(V_mon)=q_0.975(V_mon)<=0.02 AND L95(Delta_D)=q_0.025(Delta_D)>=0.10",
+    "extinction_gate": "U95(D_min)=q_0.975(D_min)<=0.05",
     "no_BCa": true,
     "no_studentized_bootstrap": true,
-    "no_seed_level_pseudoreplication": true
+    "no_seed_level_pseudoreplication": true,
+    "lower_95": "L95 = nearest-rank q_0.025",
+    "upper_95": "U95 = nearest-rank q_0.975",
+    "resample_key": "for bootstrap replicate b=0..9999 and draw d=0..N-1, key=UTF8('ATCT-PH-P2B-v0.1|BOOT|rep='+b+'|draw='+d); map to an exact uniform integer in [0,N-1] using rng_contract.uniform_integer_for_bootstrap"
   },
   "stage_lock": {
     "current_stage": "P2B-P1_IMPLEMENTATION_QUALIFICATION",
