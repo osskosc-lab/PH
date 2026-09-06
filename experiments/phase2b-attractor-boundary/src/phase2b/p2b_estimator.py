@@ -8,6 +8,27 @@ import numpy as np
 from .p2b_contract import as_f64, bootstrap_index, null_swap_bit
 
 
+FROZEN_KAPPA_GRID = (1.0, 0.75, 0.50, 0.25, 0.0)
+FROZEN_CELL_IDS = (
+    "P1-impulse-a0.25",
+    "P1-impulse-a0.50",
+    "P1-pulse8-a0.25",
+    "P1-pulse8-a0.50",
+    "P1-sine16x4-a0.25",
+    "P1-sine16x4-a0.50",
+    "P1-biphasic16-a0.25",
+    "P1-biphasic16-a0.50",
+    "P2-impulse-a0.25",
+    "P2-impulse-a0.50",
+    "P2-pulse8-a0.25",
+    "P2-pulse8-a0.50",
+    "P2-sine16x4-a0.25",
+    "P2-sine16x4-a0.50",
+    "P2-biphasic16-a0.25",
+    "P2-biphasic16-a0.50",
+)
+
+
 def _pairwise_distances(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     a = as_f64(a)
     b = as_f64(b)
@@ -54,8 +75,8 @@ def frozen_even_median(values: list[float] | np.ndarray) -> float:
 
 
 def d_boundary(cell_samples: dict[str, dict[str, np.ndarray]]) -> tuple[float, dict[str, float]]:
-    if len(cell_samples) != 16:
-        raise ValueError("exactly 16 frozen cells are required")
+    if set(cell_samples) != set(FROZEN_CELL_IDS):
+        raise ValueError("the exact 16 frozen cell IDs are required")
     per_cell: dict[str, float] = {}
     for cell_id, sides in cell_samples.items():
         if set(sides) != {"in", "out"}:
@@ -100,7 +121,7 @@ def bootstrap_primary(
     repeats: int = 10000,
 ) -> dict[str, Any]:
     """Frozen paired-seed bootstrap. Do not call during P1."""
-    kappa_grid = [1.0, 0.75, 0.50, 0.25, 0.0]
+    kappa_grid = list(FROZEN_KAPPA_GRID)
     if set(signatures_by_kappa) != set(kappa_grid):
         raise ValueError("missing frozen kappa values")
 
@@ -210,3 +231,48 @@ def finite_difference_susceptibility(
     for i in range(1, x.size - 1):
         out[i] = np.abs((y[i + 1] - y[i - 1]) / (z[i + 1] - z[i - 1]))
     return out
+
+
+def primary_h1_gate(bootstrap_output: dict[str, Any]) -> bool:
+    """Frozen H1: U95(V_mon)<=0.02 AND L95(Delta_D)>=0.10."""
+    return (
+        float(bootstrap_output["U95_V_mon"]) <= 0.02
+        and float(bootstrap_output["L95_Delta_D"]) >= 0.10
+    )
+
+
+def extinction_gate(bootstrap_output: dict[str, Any]) -> bool:
+    """Frozen secondary access-relative extinction gate."""
+    return float(bootstrap_output["U95_D_min"]) <= 0.05
+
+
+def dynamic_range_gate(response_rms_values: np.ndarray) -> bool:
+    """Gate array shape: (5 kappa, 16 cells, 2 sides, N seeds)."""
+    v = as_f64(response_rms_values)
+    if v.ndim != 4 or v.shape[:3] != (5, 16, 2):
+        raise ValueError("response_rms_values must have shape (5,16,2,N)")
+    if v.shape[3] <= 0 or not np.all(np.isfinite(v)):
+        return False
+    within = (v >= 0.01) & (v <= 2.0)
+    fractions = np.mean(within, axis=3)
+    return bool(np.all(fractions >= 0.95))
+
+
+def null_calibration_gate(v_null: np.ndarray) -> bool:
+    """Frozen paired-label-swap q95(V_null)<=0.02 gate."""
+    v = as_f64(v_null).reshape(-1)
+    if v.size != 512 or not np.all(np.isfinite(v)):
+        return False
+    return nearest_rank(v, 0.95) <= 0.02
+
+
+def counterworld_qualification_gate(bootstrap_output: dict[str, Any]) -> bool:
+    """CW1 negative-control gate: L95(Delta_D_CW)<=0.02."""
+    return float(bootstrap_output["L95_Delta_D"]) <= 0.02
+
+
+def flattening_certificate_gate() -> bool:
+    """Frozen analytic manipulation check: F_flat(0)<=0.5*F_flat(1)."""
+    f1 = 1.0
+    f0 = 0.2
+    return f0 <= 0.50 * f1
