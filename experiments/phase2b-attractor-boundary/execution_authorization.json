@@ -1,0 +1,16 @@
+{
+  "authorization_id": "ATCT-PH-P2B-v0.1-QUAL-AUTH",
+  "authorized_stages": [
+    "QUAL"
+  ],
+  "contract_git_blob_sha": "b7284913acb980fdb4285ee9c26f1725dff08380",
+  "p1_deterministic_audit": {
+    "workflow_run_id": 34005129747,
+    "head_sha": "58dcea24282548bc968d72ceda3f60a6917069b6",
+    "conclusion": "success"
+  },
+  "separate_confirmatory_freeze": false,
+  "confirmatory_authorized": false,
+  "scope": "96-seed stochastic QUAL only; no CONF generation",
+  "claim_rule": "QUAL may only authorize or stop a later confirmatory-freeze step; QUAL cannot establish confirmatory support."
+}
