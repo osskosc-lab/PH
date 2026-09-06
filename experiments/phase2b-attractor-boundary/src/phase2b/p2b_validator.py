@@ -15,6 +15,16 @@ REQUIRED_P0_FILES = (
     "README.md",
 )
 
+REQUIRED_P1_SOURCE_FILES = (
+    "src/phase2b/__init__.py",
+    "src/phase2b/p2b_contract.py",
+    "src/phase2b/p2b_simulator.py",
+    "src/phase2b/p2b_estimator.py",
+    "src/phase2b/p2b_validator.py",
+    "tests/test_p1_deterministic.py",
+    "requirements.txt",
+)
+
 PROHIBITED_SOURCE_TOKENS = (
     "np.random",
     "numpy.random",
@@ -35,6 +45,21 @@ def validate_p0_hash_lock(root: str | Path) -> dict[str, str]:
         if observed[name] != expected[name]:
             raise AssertionError(
                 f"P0 frozen file changed: {name}: {observed[name]} != {expected[name]}"
+            )
+    return observed
+
+
+def validate_p1_source_hash_lock(root: str | Path) -> dict[str, str]:
+    root = Path(root)
+    lock = load_json(root / "p1_source_lock.json")
+    expected = lock["git_blob_sha1"]
+    observed: dict[str, str] = {}
+    for rel in REQUIRED_P1_SOURCE_FILES:
+        data = (root / rel).read_bytes()
+        observed[rel] = git_blob_sha1_bytes(data)
+        if observed[rel] != expected[rel]:
+            raise AssertionError(
+                f"P1 source changed: {rel}: {observed[rel]} != {expected[rel]}"
             )
     return observed
 
@@ -112,6 +137,7 @@ def static_p1_audit(root: str | Path) -> dict[str, Any]:
     root = Path(root)
     return {
         "p0_hashes": validate_p0_hash_lock(root),
+        "p1_source_hashes": validate_p1_source_hash_lock(root),
         "contract_id": validate_contract_semantics(root)["contract_id"],
         "execution_authorization_absent": (
             not (root / "execution_authorization.json").exists()
