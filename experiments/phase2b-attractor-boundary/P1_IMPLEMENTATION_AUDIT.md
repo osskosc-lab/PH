@@ -5,9 +5,10 @@
 ```
 P2B-P0_SPECIFICATION_FREEZE: PASS
 P2B-P1_IMPLEMENTATION_PRESENT: YES
-P2B-P1_CODE_TO_CONTRACT_STATIC_REVIEW: STARTED
+P2B-P1_CODE_TO_CONTRACT_STATIC_REVIEW: PASS
 P2B-P1_DETERMINISTIC_TESTS: WRITTEN_NOT_EXECUTED
 P2B-P1_REPLAY_HASH_VALIDATOR: WRITTEN_NOT_EXECUTED
+P2B-P1_SOURCE_HASH_LOCK: CREATED
 
 STOCHASTIC_QUALIFICATION_RUN: NOT_AUTHORIZED
 CONFIRMATORY_RUN: NOT_AUTHORIZED
@@ -72,3 +73,12 @@ On this branch, that guard must fail by construction.
 5. explicit gate decision authorizing QUAL in a separate execution-authorization mutation.
 
 Until those steps pass, stochastic QUAL remains prohibited.
+
+
+## Static review result
+
+The line-by-line source mapping is recorded in `P1_STATIC_REVIEW.md`.
+No source-level scientific-parameter freedom was identified.
+
+This is not yet a P1 gate PASS because compilation, deterministic tests, and
+the replay/hash validator have not been executed.
