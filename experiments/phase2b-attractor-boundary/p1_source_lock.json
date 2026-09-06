@@ -1,0 +1,14 @@
+{
+  "lock_id": "ATCT-PH-P2B-v0.1-P1-SOURCE-GIT-BLOB-LOCK",
+  "status": "LOCKED_PENDING_DETERMINISTIC_EXECUTION_AUDIT",
+  "git_blob_sha1": {
+    "src/phase2b/__init__.py": "5f4ec8a6f7df97e4985004c2196928f180296d52",
+    "src/phase2b/p2b_contract.py": "b3a05e0403f3a142a92f30cb80d39c6f60a97c83",
+    "src/phase2b/p2b_simulator.py": "e23fe5ac10052e21c04688eff04407f80990b739",
+    "src/phase2b/p2b_estimator.py": "05d42686d3e8c0fcd62bb8b0642429980ebcfddd",
+    "src/phase2b/p2b_validator.py": "0905eb9aeab7bbe6f00f72b0aa4950f39f84c9d9",
+    "tests/test_p1_deterministic.py": "391a4f2affa8bbe53a19bddde1f4b7eb3c7a0e17",
+    "requirements.txt": "b4401c022920501b97ba50de6d934f44e2479604"
+  },
+  "rule": "Any source mismatch before stochastic QUAL requires review; any scientific-semantic change requires a new protocol version and fresh namespace."
+}
