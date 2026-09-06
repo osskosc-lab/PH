@@ -1,0 +1,86 @@
+name: ATCT-PH Phase 2B QUAL
+
+on:
+  push:
+    branches:
+      - experiment/atct-ph-phase2b-qual-v0.1
+    paths:
+      - "experiments/phase2b-attractor-boundary/execution_authorization.json"
+      - "experiments/phase2b-attractor-boundary/run_qual.py"
+      - ".github/workflows/ph-phase2b-qual.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install frozen runtime
+        run: python -m pip install -r experiments/phase2b-attractor-boundary/requirements.txt
+
+      - name: Compile QUAL entrypoint
+        run: python -m py_compile experiments/phase2b-attractor-boundary/run_qual.py
+
+      - name: Verify QUAL-only authorization
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("experiments/phase2b-attractor-boundary")
+          auth=json.loads((root/"execution_authorization.json").read_text())
+          assert auth["authorized_stages"] == ["QUAL"]
+          assert auth["contract_git_blob_sha"] == "b7284913acb980fdb4285ee9c26f1725dff08380"
+          assert auth["confirmatory_authorized"] is False
+          assert auth["separate_confirmatory_freeze"] is False
+          assert not (root/"run_confirmatory.py").exists()
+          print("QUAL authorization verified; CONF remains prohibited")
+          PY
+
+      - name: Run frozen 96-seed QUAL
+        id: qual
+        shell: bash
+        env:
+          PYTHONPATH: experiments/phase2b-attractor-boundary/src
+        run: |
+          set +e
+          python experiments/phase2b-attractor-boundary/run_qual.py \
+            --outdir experiments/phase2b-attractor-boundary/artifacts/qual
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atct-ph-phase2b-v0.1-qual
+          path: experiments/phase2b-attractor-boundary/artifacts/qual/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce qualification decision
+        if: always()
+        shell: bash
+        run: |
+          code='${{ steps.qual.outputs.exit_code }}'
+          if [ -z "$code" ]; then
+            echo "QUAL did not return an exit code"
+            exit 3
+          fi
+          if [ "$code" = "0" ]; then
+            echo "QUAL_PASS_CONFIRMATORY_FREEZE_ELIGIBLE"
+            exit 0
+          fi
+          if [ "$code" = "2" ]; then
+            echo "QUAL_STOP_GATE_FAILURE"
+            exit 2
+          fi
+          exit "$code"
