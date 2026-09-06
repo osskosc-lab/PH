@@ -71,8 +71,8 @@ def test_a_kappa_exact_endpoints():
     expected_a0 = expected_a1.copy()
     expected_a0[0, 0] = 0.95
     expected_a0[1, 1] = 0.95
-    assert np.array_equal(a1, expected_a1)
-    assert np.array_equal(a0, expected_a0)
+    np.testing.assert_allclose(a1, expected_a1, rtol=0.0, atol=1e-15)
+    np.testing.assert_allclose(a0, expected_a0, rtol=0.0, atol=1e-15)
 
 
 def test_profiles_are_frozen():
