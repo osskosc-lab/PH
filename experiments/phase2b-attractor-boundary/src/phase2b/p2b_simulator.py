@@ -195,14 +195,23 @@ def _registered_noise(
     seed_index: int,
     kappa_index: int,
     cell_id: str,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     pkey = stream_key(contract, stage, seed_index, kappa_index, cell_id, "PROCESS")
     okey = stream_key(contract, stage, seed_index, kappa_index, cell_id, "OBS")
+    rkey = stream_key(contract, stage, seed_index, kappa_index, cell_id, "REPORTER")
     sigma_p = float(contract["dynamics"]["process_noise"]["sigma_process"])
     sigma_o = float(contract["observation_model"]["sigma_obs"])
     process = gaussian_stream(pkey, 384 * 4).reshape(384, 4) * sigma_p
     obs = gaussian_stream(okey, 385 * 2).reshape(385, 2) * sigma_o
-    return process, obs
+    reporter = gaussian_stream(rkey, 384 * 2).reshape(384, 2) * 0.02
+    return process, obs, reporter
+
+
+def _locked_contract_blob_sha(root: Path) -> str:
+    import json
+
+    lock = json.loads((root / "p0_lock.json").read_text(encoding="utf-8"))
+    return lock["git_blob_sha1"]["implementation_contract.json"]
 
 
 def simulate_registered(
@@ -212,32 +221,62 @@ def simulate_registered(
     kappa_index: int,
     cell_id: str,
     side: Side,
-    expected_contract_blob_sha: str,
-) -> tuple[np.ndarray, np.ndarray]:
-    """Authorized stochastic runner.
+    mode: Literal["base", "sham", "exact_null", "oracle_clone", "counterworld"] = "base",
+):
+    """Authorized stochastic runner for all frozen Phase 2B modes.
 
-    P1 intentionally cannot call this successfully because no execution
-    authorization file is present on the branch.
+    On the P1 branch this always stops at the authorization guard because
+    execution_authorization.json is deliberately absent.
     """
     contract_path = Path(contract_path)
     root = contract_path.parent
+    expected_contract_blob_sha = _locked_contract_blob_sha(root)
     require_execution_authorization(root, stage, expected_contract_blob_sha)
     contract = load_contract(contract_path)
+
+    if stage not in {"QUAL", "CONF"}:
+        raise ValueError("registered stochastic stage must be QUAL or CONF")
+    stage_spec = (
+        contract["seed_namespace"]["qualification"]
+        if stage == "QUAL"
+        else contract["seed_namespace"]["confirmatory_reserved"]
+    )
+    if not 0 <= seed_index < int(stage_spec["n"]):
+        raise IndexError("seed_index out of registered range")
 
     kappas = contract["dynamics"]["kappa_grid"]
     if not 0 <= kappa_index < len(kappas):
         raise IndexError("kappa_index out of range")
+    if side not in {"in", "out"}:
+        raise ValueError("side must be 'in' or 'out'")
+
     cell = cell_by_id(contract, cell_id)
-    process, obs = _registered_noise(
+    process, obs, reporter = _registered_noise(
         contract, stage, seed_index, kappa_index, cell_id
     )
+    kappa = float(kappas[kappa_index])
     target = as_f64(cell[f"{side}_target"])
-    return simulate_with_noise(
-        contract,
-        float(kappas[kappa_index]),
-        target,
-        cell["profile"],
-        float(cell["amplitude"]),
-        process,
-        obs,
-    )
+    amplitude = float(cell["amplitude"])
+
+    if mode == "sham":
+        return simulate_with_noise(
+            contract, kappa, target, cell["profile"], 0.0, process, obs
+        )
+    if mode == "exact_null":
+        null_target = exact_null_target(cell)
+        return simulate_with_noise(
+            contract, kappa, null_target, cell["profile"], amplitude, process, obs
+        )
+    if mode == "oracle_clone":
+        return simulate_oracle_clone_with_noise(
+            contract, kappa, target, cell["profile"], amplitude, process, obs
+        )
+    if mode == "counterworld":
+        return simulate_counterworld_with_noise(
+            contract, kappa, cell, side, process, obs, reporter
+        )
+    if mode == "base":
+        return simulate_with_noise(
+            contract, kappa, target, cell["profile"], amplitude, process, obs
+        )
+    raise ValueError(f"unregistered mode: {mode}")
