@@ -1,0 +1,12 @@
+{
+  "lock_id": "ATCT-PH-P2B-v0.1-P0-GIT-BLOB-LOCK",
+  "locked_at_gate": "P2B-P0_SPECIFICATION_FREEZE",
+  "git_blob_sha1": {
+    "implementation_contract.json": "b7284913acb980fdb4285ee9c26f1725dff08380",
+    "preregistration.json": "5029e37bb1c44ae62ac227a7623e10043297b111",
+    "CLAIM_FIREWALL.md": "283a2d3b2a2fb1cfdbf317573006fe4a33b30234",
+    "P0_FREEZE_AUDIT.md": "c109599a12a98a6b0193de634c0413794dd30ad1",
+    "README.md": "dca229d0e837b9e1e1371d25335477191ed97d67"
+  },
+  "rule": "Any mismatch requires a new protocol version and fresh master seed namespace before scientific execution."
+}

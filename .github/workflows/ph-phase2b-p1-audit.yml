@@ -1,0 +1,58 @@
+name: ATCT-PH Phase 2B P1 Deterministic Audit
+
+on:
+  push:
+    branches:
+      - experiment/atct-ph-phase2b-prereg-v0.1
+    paths:
+      - "experiments/phase2b-attractor-boundary/**"
+      - ".github/workflows/ph-phase2b-p1-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install frozen P1 runtime
+        run: python -m pip install -r experiments/phase2b-attractor-boundary/requirements.txt
+
+      - name: Validate frozen JSON
+        run: |
+          python -m json.tool experiments/phase2b-attractor-boundary/implementation_contract.json >/dev/null
+          python -m json.tool experiments/phase2b-attractor-boundary/preregistration.json >/dev/null
+          python -m json.tool experiments/phase2b-attractor-boundary/p0_lock.json >/dev/null
+          python -m json.tool experiments/phase2b-attractor-boundary/p1_source_lock.json >/dev/null
+
+      - name: Compile P1 sources and tests
+        run: |
+          python -m py_compile experiments/phase2b-attractor-boundary/src/phase2b/p2b_contract.py
+          python -m py_compile experiments/phase2b-attractor-boundary/src/phase2b/p2b_simulator.py
+          python -m py_compile experiments/phase2b-attractor-boundary/src/phase2b/p2b_estimator.py
+          python -m py_compile experiments/phase2b-attractor-boundary/src/phase2b/p2b_validator.py
+          python -m py_compile experiments/phase2b-attractor-boundary/tests/test_p1_deterministic.py
+
+      - name: Run deterministic unit tests only
+        run: |
+          pytest -q experiments/phase2b-attractor-boundary/tests/test_p1_deterministic.py
+
+      - name: Run P0/P1 replay and hash validator
+        env:
+          PYTHONPATH: experiments/phase2b-attractor-boundary/src
+        run: |
+          python -m phase2b.p2b_validator
+
+      - name: Enforce stochastic execution lock
+        run: |
+          test ! -e experiments/phase2b-attractor-boundary/execution_authorization.json
+          test ! -e experiments/phase2b-attractor-boundary/run_qual.py
+          test ! -e experiments/phase2b-attractor-boundary/run_confirmatory.py

@@ -1,0 +1,141 @@
+{
+  "title": "ATCT-PH Phase 2B v0.1 — Attractor Flattening and Operational Boundary Degeneracy",
+  "version": "0.2-pre-freeze",
+  "language": "Japanese",
+  "research_mode": "falsification_first",
+  "protocol_status": "P0_SPECIFICATION_FROZEN_FOR_IMPLEMENTATION_QUALIFICATION",
+  "execution_status": {
+    "specification_gate": "PASS",
+    "current_gate": "P2B-P1_IMPLEMENTATION_QUALIFICATION",
+    "implementation_scaffold": "AUTHORIZED",
+    "stochastic_qualification_execution": "NOT_AUTHORIZED_PENDING_CODE_AUDIT",
+    "confirmatory_execution": "NOT_AUTHORIZED"
+  },
+  "scope": {
+    "scientific_target": "registered restoring organization kappa の低下に伴う operational causal boundary distinguishability D_boundary の縮退",
+    "claim_population": "the single frozen synthetic base DGP defined in implementation_contract.json",
+    "excluded_targets": [
+      "ego death",
+      "consciousness onset",
+      "selfhood identity",
+      "qualia location or transfer",
+      "soul existence/persistence/death/transfer",
+      "latent boundary identity",
+      "biological validity"
+    ],
+    "claim_ceiling": "synthetic, access-relative, operational boundary-degeneracy claim only"
+  },
+  "frozen_contract_file": "experiments/phase2b-attractor-boundary/implementation_contract.json",
+  "model": {
+    "equation": "x_{t+1}=A_kappa x_t+b_j u_t+eta_t; A_kappa=I+0.25(-Q_0+Omega-kappa Q_K)",
+    "state_dimension": 4,
+    "state_order": [
+      "c1",
+      "c2",
+      "e1",
+      "e2"
+    ],
+    "K": "{x:c1=0,c2=0}",
+    "kappa_grid": [
+      1,
+      0.75,
+      0.5,
+      0.25,
+      0
+    ],
+    "F_R_K": "fully frozen in implementation_contract.json",
+    "delta_T_role": "analysis-window hyperparameter only"
+  },
+  "primary_endpoint": {
+    "name": "D_boundary(kappa)",
+    "distance": "normalized energy distance V-statistic on fixed 256D baseline-subtracted signatures",
+    "cells": 16,
+    "aggregation": "median across the 16 frozen matched cells",
+    "interpretation": "operational boundary distinguishability under A_P2B only"
+  },
+  "primary_hypothesis": {
+    "id": "H1_TREND",
+    "statement": "Within the frozen base DGP, decreasing kappa yields non-increasing D_boundary within tolerance and a non-trivial endpoint reduction.",
+    "delta_D_tolerance": 0.02,
+    "minimum_endpoint_drop": 0.1,
+    "inferential_gate": "bootstrap U95(V_mon)<=0.02 AND bootstrap L95(Delta_D)>=0.10"
+  },
+  "secondary_extinction": {
+    "id": "H_EXTINCTION",
+    "epsilon_B": 0.05,
+    "gate": "bootstrap U95(D_boundary(kappa=0))<=0.05",
+    "firewall": "access-relative extinction is not absolute disappearance"
+  },
+  "flattening_certificate": {
+    "analytic": "F_flat(kappa)=0.20+0.80*kappa",
+    "values": {
+      "1.0": 1,
+      "0.75": 0.8,
+      "0.5": 0.6,
+      "0.25": 0.4,
+      "0.0": 0.2
+    },
+    "gate": "F_flat(0)<=0.50*F_flat(1)",
+    "empirical_crosscheck": "tau_return from the two frozen off-K perturbations; secondary only"
+  },
+  "fisher_diagnostic": {
+    "theta": [
+      "c13",
+      "c24",
+      "log(sigma_obs)"
+    ],
+    "nominal": [
+      0.25,
+      0.25,
+      -3.506557897319982
+    ],
+    "likelihood": "conditional Gaussian p(y|x,theta)",
+    "effective_rank_epsilon": "1e-6*lambda_max",
+    "status": "DIAGNOSTIC_ONLY"
+  },
+  "intervention_cells": {
+    "number": 16,
+    "target_pairs": [
+      "c1 vs e1",
+      "c2 vs e2"
+    ],
+    "profiles": [
+      "impulse",
+      "pulse8",
+      "sine16x4",
+      "biphasic16"
+    ],
+    "amplitudes": [
+      0.25,
+      0.5
+    ],
+    "full_manifest": "implementation_contract.json"
+  },
+  "seed_and_bootstrap": {
+    "namespace": "ATCT-PH-P2B-v0.1",
+    "qualification_n": 96,
+    "confirmatory_reserved_n": 384,
+    "rng": "SHA256 counter mode + frozen Box-Muller",
+    "bootstrap_B": 10000,
+    "unit": "seed",
+    "quantile": "nearest-rank",
+    "full_spec": "implementation_contract.json"
+  },
+  "controls": {
+    "exact_null": "M_NULL_IDENTICAL_ACTUATION",
+    "permutation_null_repeats": 512,
+    "counterworld": "CW1_DECOUPLED_REPORTER; negative-control/generalization falsifier, not base-H1 decider",
+    "oracle_clone": "8D duplicated latent exact access-equivalent clone"
+  },
+  "claim_firewall": [
+    "D_boundary > 0 != latent boundary identified",
+    "D_boundary -> 0 != absolute causal disappearance",
+    "F_flat -> 0 != ego death",
+    "DeltaT is an analysis parameter, not a death-state variable",
+    "Fisher rank loss != phenomenology",
+    "synthetic success != biological or neural validity",
+    "boundary degeneration detected != latent boundary mechanism identified"
+  ],
+  "freeze_rule": "Any change to F/R/K, K, theta, intervention cells, seed namespace, RNG, distance estimator, bootstrap, thresholds, null, counterworld, or Oracle Clone after this commit requires a new protocol version and fresh seed namespace.",
+  "next_step": "write implementation only; no stochastic simulation until code-to-contract audit passes"
+}
