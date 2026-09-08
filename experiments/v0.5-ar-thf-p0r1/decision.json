@@ -1,0 +1,11 @@
+{
+  "phase": "PH v0.5 AR-THF P0-r1",
+  "decision": "P0_R1_STAGED_FOR_HUMAN_FREEZE_REVIEW",
+  "P1_IMPLEMENTATION": "PROHIBITED",
+  "STOCHASTIC_QUALIFICATION": "PROHIBITED",
+  "PILOT": "PROHIBITED",
+  "CONFIRMATORY": "PROHIBITED",
+  "human_pi_approval_required": true,
+  "approval_condition": "review and accept the frozen equations, access operators, metrics, experiment matrix, seeds and gates without modification; any substantive modification creates P0-r2",
+  "allowed_next_action": "static P0 contract review only"
+}

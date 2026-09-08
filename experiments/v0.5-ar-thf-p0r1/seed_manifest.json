@@ -1,0 +1,16 @@
+{
+  "namespace": "PH-v0.5-ARTHF-P0r1",
+  "rng": "NumPy default_rng / PCG64",
+  "derivation": "seed_uint64 = first_8_bytes_big_endian(SHA256(namespace|phase|generator|access|cell|master_index|replicate_index)) & 0x7fffffffffffffff",
+  "master_index_ranges": {
+    "P2_qualification": [1000,1049],
+    "P3_pilot": [2000,2199],
+    "P4_confirmatory_locked": [3000,3499],
+    "null_calibration": [9000,9199]
+  },
+  "replicates_per_master_for_HV_HI": 64,
+  "bootstrap_B": 2000,
+  "common_random_numbers": "paired contrasts share substream keys except the explicitly manipulated component",
+  "confirmatory_locked": true,
+  "legacy_policy": "fresh namespace; no legacy seed integer is imported or reused"
+}
