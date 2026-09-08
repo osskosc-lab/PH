@@ -1,0 +1,20 @@
+name: PH v0.5 P0-r2 debug-hardened static audit
+
+on:
+  push:
+    branches: [experiment/ph-v0.5-ar-thf-p0r2-debug-hardening]
+  pull_request:
+    paths:
+      - 'experiments/v0.5-ar-thf-p0r2/**'
+      - '.github/workflows/ph-v05-p0r2-static-audit.yml'
+
+jobs:
+  p0-r2-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run P0-r2 cross-file contract audit
+        run: python experiments/v0.5-ar-thf-p0r2/static_contract_audit.py

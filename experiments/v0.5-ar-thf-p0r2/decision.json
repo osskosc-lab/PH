@@ -1,0 +1,13 @@
+{
+  "phase": "PH v0.5 AR-THF P0-r2",
+  "decision": "P0_R2_STAGED_FOR_HUMAN_FREEZE_REVIEW",
+  "supersedes": "P0-r1 staged design at e4ab89e743fdf59783ee890aafbc680690c87098",
+  "reason": "debug hardening fixed seed-pairing contradiction, deterministic A0 profile timing, H3 absolute-time chirp bug, H3 shared-noise leakage/identifiability weakness, H4 test ambiguity, and Q8 null ambiguity",
+  "P1_IMPLEMENTATION": "PROHIBITED",
+  "STOCHASTIC_QUALIFICATION": "PROHIBITED",
+  "PILOT": "PROHIBITED",
+  "CONFIRMATORY": "PROHIBITED",
+  "human_pi_approval_required": true,
+  "approval_condition": "accept P0-r2 equations/access/metrics/seeds/gates unchanged; substantive modification creates P0-r3",
+  "allowed_next_action": "static P0-r2 contract review only"
+}

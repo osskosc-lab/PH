@@ -1,0 +1,41 @@
+{
+  "namespace": "PH-v0.5-ARTHF-P0r2",
+  "rng": "NumPy default_rng / PCG64",
+  "hash_to_seed": "seed_uint64 = first_8_bytes_big_endian(SHA256(namespace|phase|stream_type|pair_group|master_index|replicate_index|component)) & 0x7fffffffffffffff",
+  "stream_types": {
+    "PLANT": "Brownian streams for physical core, mediator, hidden/common-driver and environment. For registered paired comparisons pair_group is shared across compared generator/access conditions.",
+    "MEASUREMENT": "Observation noise. pair_group includes access label so measurement noise is independent across A1 high/mid/low.",
+    "FEATURE": "Feature-side stochastic measurements for H3.",
+    "H3_TARGET": "Independent target-side stochastic measurements for H3. Must never reuse FEATURE seeds.",
+    "BOOTSTRAP": "Bootstrap substreams.",
+    "PERMUTATION": "H4 Rademacher sign-flip substream."
+  },
+  "pair_groups": {
+    "H1_G0_A1": "same PLANT seed across a_high/a_mid/a_low; separate MEASUREMENT seeds",
+    "H2_G0_G7": "same PLANT seed for G0/G7 except registered parameter perturbation",
+    "H2_G0_G8": "same PLANT seed for G0/G8 except registered parameter perturbation",
+    "H2_G0_G9": "same PLANT seed for G0/G9; observation transduction differs by registration",
+    "H4_G4_G5": "same exogenous/core/mediator PLANT components; G5 additionally has hidden-h component",
+    "H5_G0_G6_A0": "same physical-core/environment PLANT components and the same single mediator innovation component used by G0 b and both G6 zV/zO",
+    "H5_G0_G6_A2": "same paired PLANT components; structural difference arises only from mediator multiplicity/positions under the common spatial field",
+    "HV_G0_G8": "same PLANT components for viability-targeted contrast",
+    "HI_G0_G7": "same PLANT components for influence-targeted contrast"
+  },
+  "master_index_ranges": {
+    "P2_qualification": [1000,1049],
+    "P3_pilot": [2000,2199],
+    "P4_confirmatory_locked": [3000,3499],
+    "null_canaries": [9000,9199]
+  },
+  "replicates_per_master_for_HV_HI": 64,
+  "bootstrap_B": 2000,
+  "H4_permutation_B": 20000,
+  "confirmatory_locked": true,
+  "invariants": [
+    "PLANT paired seeds must not include generator or access names outside pair_group.",
+    "MEASUREMENT seeds must include access identity.",
+    "FEATURE and H3_TARGET stream_type values must produce disjoint seeds for every master/replicate/component.",
+    "All master index ranges are disjoint.",
+    "No legacy PH seed is imported or reused."
+  ]
+}
