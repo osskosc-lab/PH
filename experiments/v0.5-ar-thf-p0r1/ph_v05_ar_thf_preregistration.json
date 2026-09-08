@@ -1,0 +1,53 @@
+{
+  "title": "PH v0.5 Access-Relative Tri-Horizon Falsification",
+  "alias": "AR-THF Phase 0A-r1",
+  "version": "0.5.0-p0r1",
+  "language": "Japanese",
+  "research_mode": "falsification_first",
+  "base_commit": "22e9918af0a6fa7b7096aa658a76deee8a1cdf5f",
+  "frozen_prior": {
+    "PH_v0.3.3_r1": "single shared-boundary node identity NON_IDENTIFIABLE under A0",
+    "PH_v0.4_Phase0A": "ACCESS_ASSUMPTION_FAIL; Confirmatory not generated"
+  },
+  "primary_objective": "PHを固定境界ではなく、H_V・H_O・H_Iからなるアクセス相対的・履歴依存的因果地平として操作化し、三地平の分離可能性、アクセス相対性、H_Iの非冗長性、履歴効果、最小識別アクセス条件を合成系で反証する。",
+  "formal_state": "PH_A(a,E,t)=(H_V^A(t),H_O^(A|a)(t),H_I^(A->E)(t),B_A^(a,E)(t),H_A(t))",
+  "research_questions": {
+    "RQ1": "H_V,H_O,H_Iは単一自由度へ縮約可能か。",
+    "RQ2": "基礎力学固定でアクセスaだけを変えるとH_Oは変化するか。",
+    "RQ3": "H_IはH_V/H_Oに対して未知介入予測の追加情報を持つか。",
+    "RQ4": "観測状態を一致させても履歴差が将来応答へ残るか。",
+    "RQ5": "A0で同値なshared modelとoracle cloneを、モデル非依存な追加アクセスで区別できるか。"
+  },
+  "hypotheses": {
+    "H1": "access relativity of H_O",
+    "H2": "directional separability of H_V,H_O,H_I",
+    "H3": "non-redundancy of H_I",
+    "H4": "history dependence under matched observed state",
+    "H5": "enriched access breaks A0 oracle equivalence"
+  },
+  "phases": {
+    "P0_r1": "specification freeze only",
+    "P1": "deterministic implementation, prohibited until Human PI freeze approval",
+    "P2": "qualification, prohibited until P1 audit PASS",
+    "P3": "fresh Pilot, prohibited until P2 all gates PASS",
+    "P4": "Confirmatory, Human PI explicit authorization required"
+  },
+  "global_statistics": {
+    "alpha_familywise": 0.01,
+    "bonferroni_hypotheses": 5,
+    "alpha_per_hypothesis": 0.002,
+    "bootstrap_B": 2000
+  },
+  "critical_policy": [
+    "No post-hoc threshold changes.",
+    "No seed extension after seeing results.",
+    "No model-specific latent-node names may be used by A2.",
+    "A0 oracle equivalence must be analytic by construction and numerically replayed; failure-to-reject is not equivalence.",
+    "G7/G8/G9 freeze parameter perturbations, not desired outcomes.",
+    "Any mandatory Qualification gate FAIL => STOP.",
+    "No biological, human, consciousness, qualia, soul, or real-world existence claim."
+  ],
+  "current_decision": "P0_R1_STAGED_FOR_HUMAN_FREEZE_REVIEW",
+  "p1_authorized": false,
+  "stochastic_execution_authorized": false
+}

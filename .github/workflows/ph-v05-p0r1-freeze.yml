@@ -1,0 +1,47 @@
+name: PH v0.5 P0-r1 static freeze audit
+
+on:
+  push:
+    branches: [experiment/ph-v0.5-ar-thf-p0r1-freeze]
+  pull_request:
+    paths:
+      - 'experiments/v0.5-ar-thf-p0r1/**'
+      - '.github/workflows/ph-v05-p0r1-freeze.yml'
+
+jobs:
+  static-p0-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse frozen JSON and enforce execution lock
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          root=pathlib.Path("experiments/v0.5-ar-thf-p0r1")
+          required=[
+            "ph_v05_ar_thf_preregistration.json",
+            "qualification_gates.json",
+            "seed_manifest.json",
+            "decision.json",
+            "audit_manifest.json",
+          ]
+          for name in required:
+            with open(root/name,"r",encoding="utf-8") as f:
+              json.load(f)
+          forbidden=[
+            "run_qual.py","run_pilot.py","run_confirmatory.py",
+            "execution_authorization.json","simulator.py"
+          ]
+          present=[str(p) for p in root.rglob("*") if p.name in forbidden]
+          if present:
+            raise SystemExit("P0 execution-lock violation: "+repr(present))
+          d=json.load(open(root/"decision.json",encoding="utf-8"))
+          assert d["P1_IMPLEMENTATION"]=="PROHIBITED"
+          assert d["STOCHASTIC_QUALIFICATION"]=="PROHIBITED"
+          assert d["CONFIRMATORY"]=="PROHIBITED"
+          print("P0_STATIC_FREEZE_AUDIT: PASS")
+          print("No stochastic execution performed.")
+          PY
