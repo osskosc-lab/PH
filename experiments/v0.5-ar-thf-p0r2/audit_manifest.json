@@ -1,0 +1,18 @@
+{
+  "p0_version": "0.5.0-p0r2",
+  "parent_p0_commit": "e4ab89e743fdf59783ee890aafbc680690c87098",
+  "branch": "experiment/ph-v0.5-ar-thf-p0r2-debug-hardening",
+  "debug_findings_fixed": [
+    "DBG-01 CRITICAL: seed derivation included generator/access and contradicted common-random-number/pathwise-equivalence requirements",
+    "DBG-02 MAJOR: A0 pulse timing and PRBS realization were not fully deterministic",
+    "DBG-03 CRITICAL: H3 chirp formula used absolute t, shifting intended 0.15-0.45 Hz sweep to ~1.35-1.65 Hz",
+    "DBG-04 CRITICAL: H3 feature and target runs lacked explicit independent stochastic streams, permitting shared-noise leakage",
+    "DBG-05 MAJOR: H3 had no registered structural heterogeneity, so non-redundancy could collapse to seed-noise prediction",
+    "DBG-06 MAJOR: H4 permutation test was underspecified",
+    "DBG-07 MAJOR: Q8 family-wise false-positive criterion lacked exact null experiment definitions",
+    "DBG-08 MAJOR: static CI parsed JSON but did not audit cross-file scientific invariants"
+  ],
+  "simulation_executed": false,
+  "stochastic_data_generated": false,
+  "P1_authorized": false
+}
