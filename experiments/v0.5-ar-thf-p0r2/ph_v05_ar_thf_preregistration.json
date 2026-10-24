@@ -1,0 +1,66 @@
+{
+  "title": "PH v0.5 Access-Relative Tri-Horizon Falsification",
+  "alias": "AR-THF Phase 0A-r2",
+  "version": "0.5.0-p0r2",
+  "language": "Japanese",
+  "research_mode": "falsification_first",
+  "parent_p0_commit": "e4ab89e743fdf59783ee890aafbc680690c87098",
+  "frozen_prior": {
+    "PH_v0.3.3_r1": "single shared-boundary node identity NON_IDENTIFIABLE under A0",
+    "PH_v0.4_Phase0A": "ACCESS_ASSUMPTION_FAIL; Confirmatory not generated",
+    "PH_v0.5_P0_r1": "static freeze staged but not Human-PI approved; superseded by P0-r2 debug hardening before any P1 implementation"
+  },
+  "primary_objective": "PHを固定境界ではなく、H_V・H_O・H_Iからなるアクセス相対的・履歴依存的因果地平として操作化し、三地平の分離可能性、アクセス相対性、H_Iの非冗長性、履歴効果、最小識別アクセス条件を合成系で反証する。",
+  "formal_state": "PH_A(a,E,t)=(H_V^A(t),H_O^(A|a)(t),H_I^(A->E)(t),B_A^(a,E)(t),H_A(t))",
+  "research_questions": {
+    "RQ1": "H_V,H_O,H_Iは単一自由度へ縮約可能か。",
+    "RQ2": "基礎力学固定でアクセスaだけを変えるとH_Oは変化するか。",
+    "RQ3": "H_IはH_V/H_Oに対して未知介入予測の追加情報を持つか。",
+    "RQ4": "観測状態を一致させても履歴差が将来応答へ残るか。",
+    "RQ5": "A0で同値なshared modelとoracle cloneを、モデル非依存な追加アクセスで区別できるか。"
+  },
+  "hypotheses": {
+    "H1": "access relativity of H_O",
+    "H2": "directional separability of H_V,H_O,H_I",
+    "H3": "non-redundancy of H_I under a frozen balanced heterogeneity lattice",
+    "H4": "history dependence under matched observed state",
+    "H5": "enriched access breaks A0 oracle equivalence"
+  },
+  "global_statistics": {
+    "alpha_familywise": 0.01,
+    "bonferroni_hypotheses": 5,
+    "alpha_per_hypothesis": 0.002,
+    "bootstrap_B": 2000,
+    "permutation_B_H4": 20000
+  },
+  "debug_hardening": [
+    "Common-random-number seed derivation no longer includes generator/access in paired plant substreams.",
+    "A0 pulse/multisine/PRBS timing is fully fixed and PRBS is deterministic.",
+    "H3 chirp uses local time tau=t-20 rather than absolute time.",
+    "H3 feature and target stochastic streams are independent to prevent shared-noise leakage.",
+    "H3 uses a balanced, frozen three-axis heterogeneity lattice so non-redundancy is estimable rather than being driven only by seed noise.",
+    "H4 permutation test is fully specified.",
+    "Q8 is an explicit null-canary suite rather than an undefined family-wise false-positive estimate.",
+    "Static CI now audits cross-file invariants, seed-range disjointness and execution locks."
+  ],
+  "phases": {
+    "P0_r2": "specification freeze/debug hardening only",
+    "P1": "deterministic implementation, prohibited until Human PI freeze approval",
+    "P2": "qualification, prohibited until P1 deterministic audit PASS",
+    "P3": "fresh Pilot, prohibited until P2 all mandatory gates PASS",
+    "P4": "Confirmatory, explicit Human PI authorization required"
+  },
+  "critical_policy": [
+    "No post-hoc threshold changes.",
+    "No seed extension after seeing results.",
+    "No model-specific latent-node names may be used by A2.",
+    "A0 oracle equivalence must be analytic by construction and numerically replayed; failure-to-reject is not equivalence.",
+    "G7/G8/G9 freeze parameter perturbations, not desired outcomes.",
+    "Paired plant streams use pair_group; measurement and H3-target streams are separate.",
+    "Any mandatory Qualification gate FAIL => STOP.",
+    "No biological, human, consciousness, qualia, soul, or real-world existence claim."
+  ],
+  "current_decision": "P0_R2_STAGED_FOR_HUMAN_FREEZE_REVIEW",
+  "p1_authorized": false,
+  "stochastic_execution_authorized": false
+}
