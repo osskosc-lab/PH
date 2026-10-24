@@ -8,6 +8,9 @@ on:
       - 'experiments/v0.5-ar-thf-p0r1/**'
       - '.github/workflows/ph-v05-p0r1-freeze.yml'
 
+permissions:
+  contents: read
+
 jobs:
   static-p0-audit:
     runs-on: ubuntu-latest
