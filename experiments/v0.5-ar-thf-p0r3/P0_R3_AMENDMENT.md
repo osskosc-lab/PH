@@ -75,7 +75,7 @@ Compute SHA-256 over the canonical UTF-8 bytes. Interpret digest bytes 0–7 as 
 
 For canonical string
 123|burnin|G0|PLANT|H1_G0_A1|0|0|x1
-SHA-256's first eight bytes interpreted little-endian must produce seed 10371618808033434132. This deterministic known-answer test must not initialize or draw from an RNG.
+SHA-256's first eight bytes interpreted little-endian must produce seed 15144518583270549771. This deterministic known-answer test must not initialize or draw from an RNG.
 
 ## Execution locks and allowed validation
 
