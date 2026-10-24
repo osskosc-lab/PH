@@ -1,0 +1,23 @@
+name: PH v0.5 P0-r3 deterministic amendment audit
+
+on:
+  push:
+    branches: [experiment/ph-v0.5-ar-thf-p0r3-freeze-amendment]
+  pull_request:
+    paths:
+      - 'experiments/v0.5-ar-thf-p0r3/**'
+      - '.github/workflows/ph-v05-p0r3-static-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  p0-r3-amendment-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run deterministic P0-r3 amendment audit
+        run: python experiments/v0.5-ar-thf-p0r3/static_contract_audit.py
