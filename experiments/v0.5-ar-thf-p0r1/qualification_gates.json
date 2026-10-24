@@ -1,0 +1,59 @@
+{
+  "title": "PH v0.5 AR-THF Qualification Gates",
+  "mandatory_all_pass": true,
+  "Q0": {
+    "name": "freeze_integrity",
+    "criterion": "all required P0 files parse; branch contains no simulator/run_qual/run_pilot/run_confirmatory or execution_authorization file",
+    "fail_action": "STOP"
+  },
+  "Q1": {
+    "name": "endpoint_dynamic_range",
+    "criterion": "G0 Qualification: H_V uses >=4 distinct D_grid bins across 50 master seeds; median |Omega_low-Omega_high| >=0.05; median H_I >=0.05",
+    "fail_action": "STOP"
+  },
+  "Q2": {
+    "name": "access_purity",
+    "criterion": "A1 changes only sample interval, delay, observation surface and R; generator coefficient hash is unchanged within a model across A1 levels",
+    "fail_action": "STOP"
+  },
+  "Q3": {
+    "name": "model_independent_A2",
+    "criterion": "A2 function signature contains only physical center, preregistered node positions and pulse; model identity/latent node label is not an argument",
+    "fail_action": "STOP"
+  },
+  "Q4": {
+    "name": "A0_oracle_equivalence",
+    "criterion": "G0 vs G6 paired noiseless A0 max absolute trajectory difference <=1e-10 for all 50 Qualification seeds and all 5 A0 profiles",
+    "fail_action": "STOP"
+  },
+  "Q5": {
+    "name": "A2_positive_reach",
+    "criterion": "G0 A2: median normalized RMS intervention response versus zero >=0.10 and median target response SNR >=5.0 over all three centers",
+    "fail_action": "STOP"
+  },
+  "Q6": {
+    "name": "A3_environment_reach",
+    "criterion": "median G0 H_I >=0.05 and 99% bootstrap lower bound of median(G0 H_I)-median(null H_I) >0.02",
+    "fail_action": "STOP"
+  },
+  "Q7": {
+    "name": "history_match_quality",
+    "criterion": "post-reset canonical max mismatch <=1e-10 for every pair and G4 median future normalized RMS <=0.01",
+    "fail_action": "STOP"
+  },
+  "Q8": {
+    "name": "null_family_calibration",
+    "criterion": "using 200 null-calibration master seeds, family-wise false-positive rate for frozen H1-H5 decision rules <=0.05",
+    "fail_action": "STOP"
+  },
+  "Q9": {
+    "name": "numerical_estimability",
+    "criterion": "all arrays finite; EKF convergence >=95%; no covariance determinant <=1e-12; H_V floor or ceiling occupancy each <0.80; no run exceeds 10000 integration steps after metric-specific reset",
+    "fail_action": "STOP"
+  },
+  "Q10": {
+    "name": "hard_stop",
+    "criterion": "Q0-Q9 all PASS",
+    "fail_action": "P2_STOP_AND_P3_PROHIBITED"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "p0_version": "0.5.0-p0r1",
+  "base_branch": "experiment/ph-v0.4-phase0a-targeted-access",
+  "branch": "experiment/ph-v0.5-ar-thf-p0r1-freeze",
+  "critical_repairs_from_prior_review": {
+    "A2_ontology_leak": "repaired by model-independent Gaussian spatial field",
+    "A0_equivalence_test": "repaired by analytic pathwise construction plus <=1e-10 replay gate",
+    "HV_grid": "fully fixed",
+    "EKF": "algorithm/init/Q/R/Jacobian/convergence fixed",
+    "HI_time_units": "0.10 s samples over 5.0 s with normalized exponential weights",
+    "RI_predictor": "fixed Ridge alpha=1.0, fixed split, fixed MSE and bootstrap",
+    "targeted_controls": "parameter perturbations frozen; outcomes not forced"
+  },
+  "unresolved_until_human_review": [
+    "scientific appropriateness of the chosen synthetic coefficient values",
+    "acceptance of effect-size thresholds as preregistered design choices"
+  ],
+  "simulation_executed": false,
+  "stochastic_data_generated": false
+}

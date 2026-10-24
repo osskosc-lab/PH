@@ -1,0 +1,21 @@
+cell_id,generator,access,protocol,primary_use,phase_allowed
+C01,G0,A0,5 registered A0 profiles,A0 equivalence positive side,P2
+C02,G6,A0,5 registered A0 profiles,A0 equivalence oracle side,P2
+C03,G0,A1-high,zero input,H1 opacity,P2/P3
+C04,G0,A1-mid,zero input,H1 opacity,P2/P3
+C05,G0,A1-low,zero input,H1 opacity,P2/P3
+C06,G3,A1-low,zero input,access-artifact negative control,P2/P3
+C07,G0,A2,centers -0.50/0/+0.50,A2 reach positive control,P2/P3
+C08,G6,A2,centers -0.50/0/+0.50,H5 enriched-access contrast,P2/P3
+C09,G0,A3,Fast pulse 2.0,H_I,P2/P3
+C10,G1,A3,Fast pulse 2.0,separate control,P3
+C11,G2,A3,Fast pulse 2.0,common-driver control,P3
+C12,G7,A3,Fast pulse 2.0,H2 influence-targeted,P3
+C13,G8,A0,viability disturbance grid,H2 viability-targeted,P2/P3
+C14,G9,A1-low,zero input,H2 observability-targeted,P3
+C15,G4,H4-reset,H+ vs H-,history null,P2/P3
+C16,G5,H4-reset,H+ vs H-,history positive,P2/P3
+C17,G0,A0,viability disturbance grid,H_V baseline,P2/P3
+C18,G0,A3,unseen chirp 1.5,H3 target generation,P3
+C19,G1,A0/A1/A2/A3,registered relevant cells,basic negative audit,P3
+C20,G2,A0/A1/A2/A3,registered relevant cells,confound audit,P3
