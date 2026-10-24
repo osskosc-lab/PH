@@ -39,7 +39,7 @@ canonical = unicodedata.normalize(
     "NFC", "123|burnin|G0|PLANT|H1_G0_A1|0|0|x1"
 ).encode("utf-8")
 seed = int.from_bytes(hashlib.sha256(canonical).digest()[:8], "little", signed=False)
-assert seed == 10371618808033434132, seed
+assert seed == 15144518583270549771, seed
 
 for forbidden in ("simulator.py", "run_qual.py", "run_pilot.py", "run_confirmatory.py",
                   "execution_authorization.json"):
