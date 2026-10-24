@@ -25,6 +25,7 @@ for phrase in (
     "master_index|replicate_index|component",
     "little-endian",
     "FEATURE and H3_TARGET",
+    "MEASUREMENT is renamed OBS",
 ):
     assert phrase in spec, f"missing normative requirement: {phrase}"
 
