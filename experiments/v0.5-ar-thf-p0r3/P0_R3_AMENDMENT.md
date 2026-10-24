@@ -63,7 +63,7 @@ master_seed|phase|model_id|stream_type|pair_group|master_index|replicate_index|c
 - master_seed, master_index, and replicate_index: unsigned decimal integers, no leading zero except the value 0; scientific notation and signs are forbidden.
 - phase: exactly burnin or measurement.
 - model_id: exactly G0…G9, or PAIR for a registered paired stream whose plant noise must be shared across models.
-- stream_type: exactly one of PLANT, FEATURE, H3_TARGET, OBS, INTERVENTION, BOOTSTRAP, or PERMUTATION.
+- stream_type: exactly one of PLANT, FEATURE, H3_TARGET, OBS, INTERVENTION, BOOTSTRAP, or PERMUTATION. This canonical registry supersedes legacy P0-r2 stream labels: MEASUREMENT is renamed OBS; BOOTSTRAP and PERMUTATION retain their names. INTERVENTION is used only if a registered protocol explicitly defines an independently randomized intervention stream; deterministic actuator profiles do not create an intervention RNG stream.
 - pair_group: a registered identifier from the frozen seed manifest, or exactly none.
 - component: an exact component token registered in the frozen seed manifest; no runtime-generated component names are allowed.
 
